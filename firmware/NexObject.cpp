@@ -104,20 +104,36 @@ void NexObject::printObjInfo(void)
 
 bool NexObject::getValue(const char* valueType, uint32_t* value)
 {
-  return NexGetValue(getObjName(), valueType, value);
+  char attrib[32];
+  strcpy(attrib, getObjName());
+  strcat(attrib, ".");
+  strcat(attrib, valueType);
+  return NexGetValue(attrib, value);
 }
 
 bool NexObject::setValue(const char* valueType, uint32_t value)
 {
-  return NexSetValue(getObjName(), valueType, value);
+  char attrib[32];
+  strcpy(attrib, getObjName());
+  strcat(attrib, ".");
+  strcat(attrib, valueType);
+  return NexSetValue(attrib, value);
 }
 
 uint16_t NexObject::getString(const char* valueType, char* text, uint16_t len)
 {
-  return NexGetString(getObjName(), valueType, text, len);
+  char attrib[32];
+  strcpy(attrib, getObjName());
+  strcat(attrib, ".");
+  strcat(attrib, valueType);
+  return NexGetString(attrib, text, len);
 }
 
 bool NexObject::setString(const char* valueType, const char* text)
 {
-  return NexSetString(getObjName(), valueType, text);
+  char attrib[32];
+  strcpy(attrib, getObjName());
+  strcat(attrib, ".");
+  strcat(attrib, valueType);
+  return NexSetString(attrib, text);
 }

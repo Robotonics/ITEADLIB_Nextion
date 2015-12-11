@@ -6,7 +6,7 @@
 * @author  Wu Pengfei (email:<pengfei.wu@itead.cc>)
 * @date    2015/8/11
 * @copyright 
-* Copyright (C) 2014-2015 ITEAD Intelligent Systems Co., Ltd. \n
+* Copyright (C) 2014-2015 ITEAD Intelligent Systems Co., Ltd. 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
@@ -70,9 +70,10 @@ bool      setDefaultBaudrate(uint32_t baudRate);
 bool      setBaudrate(uint32_t baudrate);
 void      sendRefreshAll(void);
 
-bool      NexGetValue(const char* objName, const char* valueType, uint32_t* value);
-bool      NexSetValue(const char* objName, const char* valueType, uint32_t value);
-uint16_t  NexGetString(const char* objName, const char* valueType, char* text, uint16_t len);
-bool      NexSetString(const char* objName, const char* valueType, const char* text);
+bool      NexGetValue(const char* varName, uint32_t* value);
+int       NexGetInt(const char* varName);
+bool      NexSetValue(const char* varName, uint32_t value);
+uint16_t  NexGetString(const char* varName, char* text, uint16_t len);
+bool      NexSetString(const char* varName, const char* text);
 
 #endif /* #ifndef __NEXHARDWARE_H__ */

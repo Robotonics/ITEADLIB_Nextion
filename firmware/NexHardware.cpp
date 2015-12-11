@@ -6,7 +6,7 @@
 * @author  Wu Pengfei (email:<pengfei.wu@itead.cc>)
 * @date    2015/8/11
 * @copyright
-* Copyright (C) 2014-2015 ITEAD Intelligent Systems Co., Ltd. \n
+* Copyright (C) 2014-2015 ITEAD Intelligent Systems Co., Ltd. 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License as
 * published by the Free Software Foundation; either version 2 of
@@ -521,51 +521,53 @@ void sendRefreshAll(void)
 }
 
 
-bool NexGetValue(const char* objName, const char* valueType, uint32_t* value)
+bool NexGetValue(const char* varName, uint32_t* value)
 {
   //char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "get %s.%s", objName, valueType);
+  //snprintf(cmd, sizeof(cmd), "get %s", varName);
   char cmd[32] = "get ";
-  strcat(cmd, objName);
-  strcat(cmd, ".");
-  strcat(cmd, valueType);
+  strcat(cmd, varName);
   sendCommand(cmd);
+
   return recvRetNumber(value);
 }
 
-bool NexSetValue(const char* objName, const char* valueType, uint32_t value)
+int NexGetInt(const char* varName)
+{
+  uint32_t val;
+  if (NexGetValue(varName, &val))
+    return (int)val;
+  else
+    return -1;
+}
+
+bool NexSetValue(const char* varName, uint32_t value)
 {
   char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "%s.%s=%d", objName, valueType, value);
-  strcpy(cmd, objName);
-  strcat(cmd, ".");
-  strcat(cmd, valueType);
+  //snprintf(cmd, sizeof(cmd), "%s=%d", varName, value);
+  strcpy(cmd, varName);
   strcat(cmd, "=");
   utoa(value, &cmd[strlen(cmd)], 10);
   sendCommand(cmd);
   return recvRetCommandFinished();
 }
 
-uint16_t NexGetString(const char* objName, const char* valueType, char* text, uint16_t len)
+uint16_t NexGetString(const char* varName, char* text, uint16_t len)
 {
   //char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "get %s.%s", objName, valueType);
+  //snprintf(cmd, sizeof(cmd), "get %s", varName, valueType);
   char cmd[32] = "get ";
-  strcat(cmd, objName);
-  strcat(cmd, ".");
-  strcat(cmd, valueType);
+  strcat(cmd, varName);
   sendCommand(cmd);
   return recvRetString(text, len);
 }
 
-bool NexSetString(const char* objName, const char* valueType, const char* text)
+bool NexSetString(const char* varName, const char* text)
 {
   char cmd[strlen(text) + 32];
   memset(cmd, 0, sizeof(cmd));
-  //snprintf(cmd, sizeof(cmd), "%s.%s=\"%s\"", objName, valueType, text);
-  strcpy(cmd, objName);
-  strcat(cmd, ".");
-  strcat(cmd, valueType);
+  //snprintf(cmd, sizeof(cmd), "%s=\"%s\"", varName, text);
+  strcat(cmd, varName);
   strcat(cmd, "=\"");
   strcat(cmd, text);
   strcat(cmd, "\"");

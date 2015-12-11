@@ -1,0 +1,4 @@
+firmware/build.bat
+firmware/GraphPrimitives.ino
+firmware/SparkBuildFlash.lnk
+firmware/firmware.bin
