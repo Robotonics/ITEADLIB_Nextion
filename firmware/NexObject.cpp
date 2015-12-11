@@ -33,22 +33,18 @@ void NexObject::setObjValue(uint8_t type, void *value)
     {
         switch (type)
         {
-        case NEX_EVENT_VALUE:
-           *((unsigned long *)__value) = (((uint8_t *)value)[0]) | (((unsigned long)((uint8_t *)value)[1]) << 8) | (((unsigned long)((uint8_t *)value)[2]) << 16) | (((unsigned long)((uint8_t *)value)[3]) << 24);
-        break;
-        case NEX_EVENT_STRING:
-        //while (*((unsigned char *)(value+i)) != 0)
-        //{
-        //#if defined(SPARK)
-        //Particle.process();
-        //#endif
-        // *((unsigned char *)(__value+i)) = *((unsigned char *)(value+i));
-        //  i++;
-        //}        
-        break;
-        default:
-        //*(__value) = 0;
-        break;
+          case NEX_EVENT_VALUE:
+             *((unsigned long *)__value) = (((uint8_t *)value)[0]) | (((unsigned long)((uint8_t *)value)[1]) << 8) | (((unsigned long)((uint8_t *)value)[2]) << 16) | (((unsigned long)((uint8_t *)value)[3]) << 24);
+            break;
+          case NEX_EVENT_STRING:
+            if (value)
+              strncpy((char*)__value, (const char*)value, strlen((const char*)value));
+            else
+              *((char*)__value) = '\0';
+            break;
+          default:
+            //*(__value) = 0;
+            break;
         }
     }
 }
@@ -68,7 +64,7 @@ const char* NexObject::getObjName(void)
     return __name;
 }
 
-void * NexObject::getObjValue(void)
+void* NexObject::getObjValue(void)
 {
     return __value;
 }
@@ -105,7 +101,7 @@ void NexObject::printObjInfo(void)
 bool NexObject::getValue(const char* valueType, uint32_t* value)
 {
   char attrib[32];
-  strcpy(attrib, getObjName());
+  strcpy(attrib, __name);
   strcat(attrib, ".");
   strcat(attrib, valueType);
   return NexGetValue(attrib, value);
@@ -114,7 +110,7 @@ bool NexObject::getValue(const char* valueType, uint32_t* value)
 bool NexObject::setValue(const char* valueType, uint32_t value)
 {
   char attrib[32];
-  strcpy(attrib, getObjName());
+  strcpy(attrib, __name);
   strcat(attrib, ".");
   strcat(attrib, valueType);
   return NexSetValue(attrib, value);
@@ -123,7 +119,7 @@ bool NexObject::setValue(const char* valueType, uint32_t value)
 uint16_t NexObject::getString(const char* valueType, char* text, uint16_t len)
 {
   char attrib[32];
-  strcpy(attrib, getObjName());
+  strcpy(attrib, __name);
   strcat(attrib, ".");
   strcat(attrib, valueType);
   return NexGetString(attrib, text, len);
@@ -132,7 +128,7 @@ uint16_t NexObject::getString(const char* valueType, char* text, uint16_t len)
 bool NexObject::setString(const char* valueType, const char* text)
 {
   char attrib[32];
-  strcpy(attrib, getObjName());
+  strcpy(attrib, __name);
   strcat(attrib, ".");
   strcat(attrib, valueType);
   return NexSetString(attrib, text);

@@ -87,14 +87,14 @@ int NexSendCommand(const char *cmdPattern, ...)
 
   while (nexSerial.read() >= 0);  // flush RX buffer only
   if (ret >= (int)sizeof(buf))    // cast to prevent warning [-Wsign-compare]
-    ret += -1; // if buffer was too short indicate error as neg. required length
+    ret *= -1; // if buffer was too short indicate error as neg. required length
   else if (ret > 0)
   {
     nexSerial.print(buf);
     if (strcmp(&buf[ret - 3], NexCMDTERM))  // if command was not properly terminated
       nexSerial.print(NexCMDTERM);          //   do it now
   }
-  dbSerialPrint(buf);
+  dbSerialPrintln(buf);
 
   return ret;
 }

@@ -26,21 +26,9 @@ NexButton::NexButton(uint8_t pid, uint8_t cid, const char *name, void *value)
 uint16_t NexButton::getText(char *buffer, uint16_t len)
 {
   return NexObject::getString("txt", buffer, len);
-  //char cmd[32] = "get ";
-  //strcat(cmd, getObjName());
-  //strcat(cmd, ".txt");
-  //sendCommand(cmd);
-  //return recvRetString(buffer, len);
 }
 
 bool NexButton::setText(const char *buffer)
 {
   return NexObject::setString("txt", buffer);
-  //char cmd[288];
-  //strcpy(cmd, getObjName());
-  //strcat(cmd, ".txt=\"");
-  //strcat(cmd, buffer);
-  //strcat(cmd, "\"");
-  //sendCommand(cmd);
-  //return recvRetCommandFinished();
 }
