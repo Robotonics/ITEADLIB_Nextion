@@ -51,8 +51,8 @@
 #define NexBACKPICTURE  "bpic"   //     ,       ,       , Progressbar,        ,     ,      ,         ,       ,      ,         ,
 #define NexFOREPICTURE  "ppic"   //     ,       ,       , Progressbar,        ,     ,      ,         ,       ,      ,         ,
 #define NexFONT         "font"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
-#define NexCENTERX      "xcen"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
-#define NexCENTERY      "ycen"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
+#define NexALIGNX       "xcen"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
+#define NexALIGNY       "ycen"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
 #define NexTEXT         "txt"    // Text,       , Button,            ,        ,     ,      ,         ,       ,      , Variable,
 #define NexVALUE        "val"    //     , Number,       , Progressbar,        ,     , Gauge,         , Slider,      , Variable, DualStateButton
 #define NexMINVALUE     "minval" //     ,       ,       ,            ,        ,     ,      ,         , Slider,      ,         , 
@@ -65,6 +65,27 @@
 #define NexTHUMBHEIGHT  "hig"    //     ,       ,       ,            ,        ,     ,      ,         , Slider,      ,         , 
 #define NexINTERVAL     "tim"    //     ,       ,       ,            ,        ,     ,      ,         ,       , Timer,         , 
 #define NexENABLED      "en"     //     ,       ,       ,            ,        ,     ,      ,         ,       , Timer,         , 
+
+typedef enum
+{
+  NexCROP = 0,
+  NexSOLID = 1,
+  NexIMAGE = 2
+} NexBACKGROUND_t;
+
+typedef enum
+{
+  NexTOPLEFT = 0,
+  NexCENTER = 1,
+  NexBOTTOMRIGHT = 2
+} NexTEXTALIGN_t;
+
+
+/*
+
+
+
+*/
 
 /** 
  * Define DEBUG_SERIAL_ENABLE to enable debug serial. 

@@ -35,5 +35,5 @@ bool NexText::setText(const char *buffer)
 
 bool NexText::setForeColor(uint32_t number)
 {
-  return NexObject::setValue(NexFORECOLOR, number);
+  return NexObject::setNumeric(NexFORECOLOR, number);
 }

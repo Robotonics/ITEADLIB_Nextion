@@ -25,11 +25,11 @@ NexCrop::NexCrop(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 bool NexCrop::getPic(uint32_t *number)
 {
-  return NexObject::getValue(NexCROPIMAGE, number);
+  return NexObject::getNumeric(NexCROPIMAGE, number);
 }
 
 bool NexCrop::setPic(uint32_t number)
 {
-  return NexObject::setValue(NexCROPIMAGE, number);
+  return NexObject::setNumeric(NexCROPIMAGE, number);
 }
 

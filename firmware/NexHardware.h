@@ -70,9 +70,9 @@ bool      setDefaultBaudrate(uint32_t baudRate);
 bool      setBaudrate(uint32_t baudrate, bool setDefault = false);
 void      sendRefreshAll(void);
 
-bool      NexGetValue(const char* varName, uint32_t* value);
+bool      NexGetNumeric(const char* varName, uint32_t* value);
+bool      NexSetNumeric(const char* varName, uint32_t value);
 int       NexGetInt(const char* varName);
-bool      NexSetValue(const char* varName, uint32_t value);
 uint16_t  NexGetString(const char* varName, char* text, uint16_t len);
 bool      NexSetString(const char* varName, const char* text);
 

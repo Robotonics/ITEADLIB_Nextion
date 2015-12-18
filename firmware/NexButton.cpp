@@ -25,10 +25,132 @@ NexButton::NexButton(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 uint16_t NexButton::getText(char *buffer, uint16_t len)
 {
-  return NexObject::getString("txt", buffer, len);
+  return NexObject::getString(NexTEXT, buffer, len);
 }
 
 bool NexButton::setText(const char *buffer)
 {
-  return NexObject::setString("txt", buffer);
+  return NexObject::setString(NexTEXT, buffer);
 }
+
+
+bool NexButton::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexButton::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
+bool NexButton::setActivedBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLORACT, color);
+}
+
+bool NexButton::getActivedBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLORACT, color);
+}
+
+
+bool NexButton::setForeColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexFORECOLOR, color);
+}
+
+bool NexButton::getForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLOR, color);
+}
+
+
+bool NexButton::setActivedForeColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexFORECOLORACT, color);
+}
+
+bool NexButton::getActivedForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLORACT, color);
+}
+
+
+bool NexButton::setPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE, picID);
+}
+
+bool NexButton::getPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE, picID);
+}
+
+
+bool NexButton::setActivedPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTUREACT, picID);
+}
+
+bool NexButton::getActivedPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTUREACT, picID);
+}
+
+
+bool NexButton::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE, picID);
+}
+
+bool NexButton::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE, picID);
+}
+
+
+bool NexButton::setActivatedCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGEACT, picID);
+}
+
+bool NexButton::getActivatedCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGEACT, picID);
+}
+
+
+bool NexButton::setFont(uint32_t fontID)
+{
+  return NexObject::setNumeric(NexFONT, fontID);
+}
+
+bool NexButton::getFont(uint32_t* fontID)
+{
+  return NexObject::getNumeric(NexFONT, fontID);
+}
+
+
+bool NexButton::setAlignX(NexTEXTALIGN_t align)
+{
+  return NexObject::setNumeric(NexALIGNX, (uint32_t)align);
+}
+
+bool NexButton::getAlignX(NexTEXTALIGN_t* align)
+{
+  return NexObject::getNumeric(NexALIGNX, (uint32_t*)align);
+}
+
+
+bool NexButton::setAlignY(NexTEXTALIGN_t align)
+{
+  return NexObject::setNumeric(NexALIGNY, (uint32_t)align);
+}
+
+bool NexButton::getAlignY(NexTEXTALIGN_t* align)
+{
+  return NexObject::getNumeric(NexALIGNX, (uint32_t*)align);
+}
+

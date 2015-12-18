@@ -35,21 +35,21 @@ void NexTimer::detachTimer(void)
 
 bool NexTimer::getCycle(uint32_t *number)
 {
-  return NexObject::getValue("tim", number);
+  return NexObject::getNumeric("tim", number);
 }
 
 bool NexTimer::setCycle(uint32_t number)
 {
   if (number < 50) number = 50;
-  return NexObject::setValue("tim", number);
+  return NexObject::setNumeric("tim", number);
 }
 
 bool NexTimer::enable(void)
 {
-  return NexObject::setValue("en", 1);
+  return NexObject::setNumeric("en", 1);
 }
 
 bool NexTimer::disable(void)
 {
-  return NexObject::setValue("en", 0);
+  return NexObject::setNumeric("en", 0);
 }

@@ -25,10 +25,10 @@ NexGauge::NexGauge(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 bool NexGauge::getValue(uint32_t *number) 
 {
-  return NexObject::getValue(NexVALUE, number);
+  return NexObject::getNumeric(NexVALUE, number);
 }
 
 bool NexGauge::setValue(uint32_t number)
 {
-  return NexObject::setValue(NexVALUE, number);
+  return NexObject::setNumeric(NexVALUE, number);
 }

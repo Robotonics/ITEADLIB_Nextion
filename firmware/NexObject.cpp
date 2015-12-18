@@ -98,38 +98,30 @@ void NexObject::printObjInfo(void)
     dbSerialPrintln("]");
 }
 
-bool NexObject::getValue(const char* valueType, uint32_t* value)
+bool NexObject::getNumeric(const char* valueType, uint32_t* value)
 {
   char attrib[32];
-  strcpy(attrib, __name);
-  strcat(attrib, ".");
-  strcat(attrib, valueType);
-  return NexGetValue(attrib, value);
+  snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
+  return NexGetNumeric(attrib, value);
 }
 
-bool NexObject::setValue(const char* valueType, uint32_t value)
+bool NexObject::setNumeric(const char* valueType, uint32_t value)
 {
   char attrib[32];
-  strcpy(attrib, __name);
-  strcat(attrib, ".");
-  strcat(attrib, valueType);
-  return NexSetValue(attrib, value);
+  snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
+  return NexSetNumeric(attrib, value);
 }
 
 uint16_t NexObject::getString(const char* valueType, char* text, uint16_t len)
 {
   char attrib[32];
-  strcpy(attrib, __name);
-  strcat(attrib, ".");
-  strcat(attrib, valueType);
+  snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
   return NexGetString(attrib, text, len);
 }
 
 bool NexObject::setString(const char* valueType, const char* text)
 {
   char attrib[32];
-  strcpy(attrib, __name);
-  strcat(attrib, ".");
-  strcat(attrib, valueType);
+  snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
   return NexSetString(attrib, text);
 }

@@ -27,19 +27,6 @@
  * @addtogroup CoreAPI 
  * @{ 
  */
-typedef enum
-{
-  NexCROP = 0,
-  NexSOLID = 1,
-  NexIMAGE = 2
-} NexBACKGROUND_t;
-
-typedef enum
-{
-  NexTOPLEFT = 0,
-  NexCENTER = 1,
-  NexBOTTOMRIGHT = 2
-} NexTEXTALIGN_t;
 
 void clearScreen(uint32_t color = 0xFFFFFF);
 void plot(uint32_t x, uint32_t y, uint32_t color = 0);

@@ -32,7 +32,7 @@ bool NexWaveform::addValue(uint8_t ch, uint8_t number)
         return false;
     }
     
-    sprintf(buf, "add %u,%u,%u", getObjCid(), ch, number);
+    sprintf(buf, NexWAVEADDPOINT, getObjCid(), ch, number);
 
     sendCommand(buf);
     return true;

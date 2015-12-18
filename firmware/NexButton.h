@@ -44,25 +44,56 @@ public: /* methods */
     NexButton(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
     /**
-     * Get text attribute of component.
-     *
-     * @param buffer - buffer storing text returned. 
-     * @param len - length of buffer. 
-     * @return The real length of text returned. 
-     */
-    uint16_t getText(char *buffer, uint16_t len);    
-
-    /**
      * Set text attribute of component.
      *
      * @param buffer - text buffer terminated with '\0'. 
      * @return true if success, false for failure. 
      */
     bool setText(const char *buffer);    
+
+    /**
+    * Get text attribute of component.
+    *
+    * @param buffer - buffer storing text returned.
+    * @param len - length of buffer.
+    * @return The real length of text returned.
+    */
+    uint16_t getText(char *buffer, uint16_t len);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setActivedBackColor(uint32_t color);
+    bool getActivedBackColor(uint32_t* color);
+ 
+    bool setForeColor(uint32_t color);
+    bool getForeColor(uint32_t* color);
+    
+    bool setActivedForeColor(uint32_t color);
+    bool getActivedForeColor(uint32_t* color);
+    
+    bool setPicture(uint32_t picID);
+    bool getPicture(uint32_t* picID);
+    
+    bool setActivedPicture(uint32_t picID);
+    bool getActivedPicture(uint32_t* picID);
+    
+    bool setCropImage(uint32_t picID);
+    bool getCropImage(uint32_t* picID);
+    
+    bool setActivatedCropImage(uint32_t picID);
+    bool getActivatedCropImage(uint32_t* picID);
+
+    bool setFont(uint32_t fontID);
+    bool getFont(uint32_t* fontID);
+
+    bool setAlignX(NexTEXTALIGN_t align);
+    bool getAlignX(NexTEXTALIGN_t *align);
+
+    bool setAlignY(NexTEXTALIGN_t align);
+    bool getAlignY(NexTEXTALIGN_t* align);
 };
 /**
  * @}
  */
-
-
 #endif /* #ifndef __NEXBUTTON_H__ */

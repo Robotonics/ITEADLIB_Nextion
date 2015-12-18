@@ -485,7 +485,7 @@ void sendRefreshAll(void)
   sendCommand(NexREFRESHALL);
 }
 
-bool NexGetValue(const char* varName, uint32_t* value)
+bool NexGetNumeric(const char* varName, uint32_t* value)
 {
   char cmd[32];
   snprintf(cmd, sizeof(cmd), NexGET, varName);
@@ -494,21 +494,21 @@ bool NexGetValue(const char* varName, uint32_t* value)
   return recvRetNumber(value);
 }
 
-int NexGetInt(const char* varName)
-{
-  uint32_t val;
-  if (NexGetValue(varName, &val))
-    return (int)val;
-  else
-    return -1;
-}
-
-bool NexSetValue(const char* varName, uint32_t value)
+bool NexSetNumeric(const char* varName, uint32_t value)
 {
   char cmd[32];
   snprintf(cmd, sizeof(cmd), NexSETVAL, varName, value);
   sendCommand(cmd);
   return recvRetCommandFinished();
+}
+
+int NexGetInt(const char* varName)
+{
+  uint32_t val;
+  if (NexGetNumeric(varName, &val))
+    return (int)val;
+  else
+    return -1;
 }
 
 uint16_t NexGetString(const char* varName, char* text, uint16_t len)

@@ -114,8 +114,9 @@ public: /* methods */
      */
     void setObjValue(uint8_t type, void *value);
 
-    bool getValue(const char* valueType, uint32_t* value);
-    bool setValue(const char* valueType, uint32_t value);
+    bool getNumeric(const char* valueType, uint32_t* value);
+    bool setNumeric(const char* valueType, uint32_t value);
+
     uint16_t getString(const char* valueType, char* text, uint16_t len);
     bool setString(const char* valueType, const char* text);
 

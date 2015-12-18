@@ -35,10 +35,10 @@ bool NexVar::setText(const char *buffer)
 
 bool NexVar::getValue(uint32_t *number)
 {
-  return NexObject::getValue(NexVALUE, number);
+  return NexObject::getNumeric(NexVALUE, number);
 }
 
 bool NexVar::setValue(uint32_t number)
 {
-  return NexObject::setValue(NexVALUE, number);
+  return NexObject::setNumeric(NexVALUE, number);
 }

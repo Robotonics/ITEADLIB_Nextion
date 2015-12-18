@@ -25,11 +25,11 @@ NexPicture::NexPicture(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 bool NexPicture::getPic(uint32_t *number)
 {
-  return NexObject::getValue(NexPICTURE, number);
+  return NexObject::getNumeric(NexPICTURE, number);
 }
 
 bool NexPicture::setPic(uint32_t number)
 {
-  return NexObject::setValue(NexPICTURE, number);
+  return NexObject::setNumeric(NexPICTURE, number);
 }
  
