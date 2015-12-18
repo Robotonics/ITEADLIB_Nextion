@@ -70,11 +70,7 @@ bool recvRetNumber(uint32_t *number, uint32_t timeout)
     goto __return;
   }
 
-  if (temp[0] == NEX_RET_NUMBER_HEAD
-    && temp[5] == 0xFF
-    && temp[6] == 0xFF
-    && temp[7] == 0xFF
-    )
+  if (temp[0] == NEX_RET_NUMBER_HEAD && strcmp((const char*)&temp[5], NexCMDTERM) == 0)
   {
     *number = (temp[4] << 24) | (temp[3] << 16) | (temp[2] << 8) | (temp[1]);
     ret = true;
@@ -187,9 +183,6 @@ void sendCommand(const char* cmd)
   while (nexSerial.read() >= 0);  // flush RX buffer only
   nexSerial.print(cmd);
   nexSerial.print(NexCMDTERM);
-  //nexSerial.write(0xFF);
-  //nexSerial.write(0xFF);
-  //nexSerial.write(0xFF);
 }
 
 /*
@@ -207,14 +200,17 @@ void sendCommand(const char* cmd)
 void sendSkript(const char* cmd, bool noRR)
 {
   char buf[12];
-  while (nexSerial.read() >= 0);            // flush RX buffer only
+  while (nexSerial.read() >= 0);          // flush RX buffer only
   if (noRR)
-    nexSerial.print("bkcmd=0\xff\xff\xff"); // deactivate result response
+  {
+    nexSerial.print("bkcmd=0");           // deactivate result response
+    nexSerial.print(NexCMDTERM);
+  }
   nexSerial.print(cmd);                 
   if (noRR)
   {
-    snprintf(buf, sizeof(buf), "bkcmd=%d\xff\xff\xff", bkCmd);
-    nexSerial.print(buf);                     // reactivate previous command response
+    snprintf(buf, sizeof(buf), "bkcmd=%d%s", bkCmd, NexCMDTERM);
+    nexSerial.print(buf);                 // reactivate previous command response
   }
 }
 
@@ -234,25 +230,17 @@ bool recvRetCommandFinished(uint32_t timeout)
 
   nexSerial.setTimeout(timeout);
   if (sizeof(temp) != nexSerial.readBytes((char *)temp, sizeof(temp)))
-  {
     ret = false;
-  }
 
-  if (temp[0] == NEX_RET_CMD_FINISHED
-    && temp[1] == 0xFF
-    && temp[2] == 0xFF
-    && temp[3] == 0xFF
-    )
-  {
+  if (temp[0] == NEX_RET_CMD_FINISHED && strcmp((const char*)&temp[1], NexCMDTERM) == 0)
     ret = true;
-  }
 
   if (ret)
-  {
+  { // need curly braces due to dbSerialPrintln macro
     dbSerialPrintln("recvRetCommandFinished ok");
   }
   else
-  {
+  { // need curly braces due to dbSerialPrintln macro
     dbSerialPrintln("recvRetCommandFinished err");
   }
 
@@ -303,7 +291,7 @@ void nexLoop(NexTouch *nex_listen_list[])
         }
         __buffer[i] = 0x00;
 
-        if (0xFF == __buffer[4] && 0xFF == __buffer[5] && 0xFF == __buffer[6])
+        if (strcmp((const char*)&__buffer[4], NexCMDTERM) == 0)
         {
           NexTouch::iterate(nex_listen_list, __buffer[1], __buffer[2], (int32_t)__buffer[3], NULL);
         }
@@ -322,7 +310,7 @@ void nexLoop(NexTouch *nex_listen_list[])
         }
         __buffer[i] = 0x00;
 
-        if (0xFF == __buffer[2] && 0xFF == __buffer[3] && 0xFF == __buffer[4])
+        if (strcmp((const char*)&__buffer[2], NexCMDTERM) == 0)
         {
           dbSerialPrintln(__buffer[1]);
           NexTouch::iterate(nex_listen_list, __buffer[1], 0, (int32_t)NEX_EVENT_PUSH, NULL);
@@ -342,7 +330,7 @@ void nexLoop(NexTouch *nex_listen_list[])
         }
         __buffer[i] = 0x00;
 
-        if (0xFF == __buffer[i - 1] && 0xFF == __buffer[i - 2] && 0xFF == __buffer[i - 3])
+        if (strcmp((const char*)&__buffer[i - 1], NexCMDTERM) == 0)
         {
           dbSerialPrint(" Page:");
           dbSerialPrint(__buffer[1]);
@@ -384,11 +372,7 @@ bool sendCurrentPageId(uint8_t* pageId)
     goto __return;
   }
 
-  if (temp[0] == NEX_RET_CURRENT_PAGE_ID_HEAD
-    && temp[2] == 0xFF
-    && temp[3] == 0xFF
-    && temp[4] == 0xFF
-    )
+  if (temp[0] == NEX_RET_CURRENT_PAGE_ID_HEAD && strcmp((const char*)&temp[2], NexCMDTERM) == 0)
   {
     *pageId = temp[1];
     ret = true;
@@ -421,12 +405,12 @@ __return:
 bool setCurrentBrightness(uint8_t dimValue, bool setDefault)
 {
   bool ret = false;
-  char cmd[16] = "dim=";
+  char cmd[16];
 
   if (setDefault)
-    strcpy(cmd, "dims=");
-
-  utoa(dimValue, &cmd[strlen(cmd)], 10);
+    snprintf(cmd, sizeof(cmd), NexSETDIMS, dimValue);
+  else
+    snprintf(cmd, sizeof(cmd), NexSETDIM, dimValue);
   sendCommand(cmd);
   delay(10);
 
@@ -456,43 +440,25 @@ bool setCurrentBrightness(uint8_t dimValue, bool setDefault)
  */
 bool setDefaultBaudrate(uint32_t defaultBaudrate)
 {
-  bool ret = false;
-  char cmd[16] = "bauds=";
-
-  utoa(defaultBaudrate, &cmd[strlen(cmd)], 10);
-  sendCommand(cmd);
-  delay(10);
-
-  if (recvRetCommandFinished())
-  {
-    dbSerialPrintln("setDefaultBaudrate ok ");
-    ret = true;
-  }
-  else
-  {
-    dbSerialPrintln("setDefaultBaudrate err ");
-  }
-
-  nexSerial.begin(defaultBaudrate);
-
-  return ret;
+  return setBaudrate(defaultBaudrate, true);
 }
 
-
 /**
-* Set current baudrate.
+* Set baudrate.
 *
 * @param  baudrate - baudrate, it supports 2400,4800,9600,19200,38400,57600,115200.
 *
 * @retval true - success.
 * @retval false - failed.
 */
-bool setBaudrate(uint32_t baudrate)
+bool setBaudrate(uint32_t baudrate, bool setDefault)
 {
   bool ret = false;
-  char cmd[16] = "baud=";
-
-  utoa(baudrate, &cmd[strlen(cmd)], 10);
+  char cmd[16];
+  if (setDefault)
+    snprintf(cmd, sizeof(cmd), NexSETBAUDS, baudrate);
+  else
+    snprintf(cmd, sizeof(cmd), NexSETBAUD, baudrate);
   sendCommand(cmd);           // send in new baudrate using the current baudrate
   delay(10);
 
@@ -514,19 +480,15 @@ bool setBaudrate(uint32_t baudrate)
   return ret;
 }
 
-
 void sendRefreshAll(void)
 {
-  sendCommand("ref 0");
+  sendCommand(NexREFRESHALL);
 }
-
 
 bool NexGetValue(const char* varName, uint32_t* value)
 {
-  //char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "get %s", varName);
-  char cmd[32] = "get ";
-  strcat(cmd, varName);
+  char cmd[32];
+  snprintf(cmd, sizeof(cmd), NexGET, varName);
   sendCommand(cmd);
 
   return recvRetNumber(value);
@@ -544,20 +506,15 @@ int NexGetInt(const char* varName)
 bool NexSetValue(const char* varName, uint32_t value)
 {
   char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "%s=%d", varName, value);
-  strcpy(cmd, varName);
-  strcat(cmd, "=");
-  utoa(value, &cmd[strlen(cmd)], 10);
+  snprintf(cmd, sizeof(cmd), NexSETVAL, varName, value);
   sendCommand(cmd);
   return recvRetCommandFinished();
 }
 
 uint16_t NexGetString(const char* varName, char* text, uint16_t len)
 {
-  //char cmd[32];
-  //snprintf(cmd, sizeof(cmd), "get %s", varName, valueType);
-  char cmd[32] = "get ";
-  strcat(cmd, varName);
+  char cmd[32];
+  snprintf(cmd, sizeof(cmd), NexGET, varName);
   sendCommand(cmd);
   return recvRetString(text, len);
 }
@@ -566,11 +523,7 @@ bool NexSetString(const char* varName, const char* text)
 {
   char cmd[strlen(text) + 32];
   memset(cmd, 0, sizeof(cmd));
-  //snprintf(cmd, sizeof(cmd), "%s=\"%s\"", varName, text);
-  strcat(cmd, varName);
-  strcat(cmd, "=\"");
-  strcat(cmd, text);
-  strcat(cmd, "\"");
+  snprintf(cmd, sizeof(cmd), NexSETSTRING, varName, text);
   sendCommand(cmd);
   return recvRetCommandFinished();
 }

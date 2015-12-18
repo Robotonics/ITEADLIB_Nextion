@@ -25,8 +25,8 @@ NexPage::NexPage(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 bool NexPage::show(void)
 {
-  char cmd[32] = "page ";
-  strcat(cmd, getObjName());
+  char cmd[32];
+  sprintf(cmd, NexPAGENAME, __name);
   sendCommand(cmd);
   return recvRetCommandFinished();
 }

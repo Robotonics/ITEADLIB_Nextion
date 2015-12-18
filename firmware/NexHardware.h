@@ -67,7 +67,7 @@ bool      recvRetCommandFinished(uint32_t timeout = 100);
 bool      sendCurrentPageId(uint8_t* pageId);
 bool      setCurrentBrightness(uint8_t dimValue, bool setDefault = false);
 bool      setDefaultBaudrate(uint32_t baudRate);
-bool      setBaudrate(uint32_t baudrate);
+bool      setBaudrate(uint32_t baudrate, bool setDefault = false);
 void      sendRefreshAll(void);
 
 bool      NexGetValue(const char* varName, uint32_t* value);

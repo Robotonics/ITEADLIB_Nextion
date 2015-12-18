@@ -119,7 +119,7 @@ public: /* methods */
     uint16_t getString(const char* valueType, char* text, uint16_t len);
     bool setString(const char* valueType, const char* text);
 
-private: /* data */
+protected: /* data */
     uint8_t __pid; /* Page ID */
     uint8_t __cid; /* Component ID */
     const char *__name; /* An unique name */

@@ -91,7 +91,7 @@ int NexSendCommand(const char *cmdPattern, ...)
   else if (ret > 0)
   {
     nexSerial.print(buf);
-    if (strcmp(&buf[ret - 3], NexCMDTERM))  // if command was not properly terminated
+    if (strcmp((const char*)&buf[ret - 3], NexCMDTERM))  // if command was not properly terminated
       nexSerial.print(NexCMDTERM);          //   do it now
   }
   dbSerialPrintln(buf);

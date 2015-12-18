@@ -25,11 +25,11 @@ NexProgressBar::NexProgressBar(uint8_t pid, uint8_t cid, const char *name, void 
 
 bool NexProgressBar::getValue(uint32_t *number)
 {
-  return NexObject::getValue("val", number);
+  return NexObject::getValue(NexVALUE, number);
 }
 
 bool NexProgressBar::setValue(uint32_t number)
 {
-  return NexObject::setValue("val", number);
+  return NexObject::setValue(NexVALUE, number);
 }
  

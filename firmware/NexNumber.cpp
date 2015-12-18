@@ -25,11 +25,11 @@ NexNumber::NexNumber(uint8_t pid, uint8_t cid, const char *name)
 
 bool NexNumber::getValue(uint32_t *number)
 {
-  return NexObject::getValue("val", number);
+  return NexObject::getValue(NexVALUE, number);
 }
 
 bool NexNumber::setValue(uint32_t number)
 {
-  return NexObject::setValue("val", number);
+  return NexObject::setValue(NexVALUE, number);
 }
 

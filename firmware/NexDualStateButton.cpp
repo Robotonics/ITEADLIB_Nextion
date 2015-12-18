@@ -25,10 +25,10 @@ NexDSButton::NexDSButton(uint8_t pid, uint8_t cid, const char *name)
 
 bool NexDSButton::getValue(uint32_t *number)
 {
-  return NexObject::getValue("val", number);
+  return NexObject::getValue(NexVALUE, number);
 }
 
 bool NexDSButton::setValue(uint32_t number)
 {
-  return NexObject::setValue("val", number);
+  return NexObject::setValue(NexVALUE, number);
 }

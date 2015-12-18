@@ -25,22 +25,11 @@ NexCrop::NexCrop(uint8_t pid, uint8_t cid, const char *name, void *value)
 
 bool NexCrop::getPic(uint32_t *number)
 {
-  return NexObject::getValue("picc", number);
-  //char cmd[32] = "get ";
-  //strcat(cmd, getObjName());
-  //strcat(cmd, ".picc");
-  //sendCommand(cmd);
-  //return recvRetNumber(number);
+  return NexObject::getValue(NexCROPIMAGE, number);
 }
 
 bool NexCrop::setPic(uint32_t number)
 {
-  return NexObject::setValue("picc", number);
-  //char cmd[32];
-  //strcpy(cmd, getObjName());
-  //strcat(cmd, ".picc=");
-  //utoa(number, &cmd[strlen(cmd)], 10);
-  //sendCommand(cmd);
-  //return recvRetCommandFinished();
+  return NexObject::setValue(NexCROPIMAGE, number);
 }
 
