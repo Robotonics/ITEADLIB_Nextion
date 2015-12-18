@@ -57,6 +57,19 @@ public: /* methods */
      * @retval false - failed. 
      */
     bool setValue(uint32_t number);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setForeColor(uint32_t color);
+    bool getForeColor(uint32_t* color);
+
+    bool setActivedPicture(uint32_t picID);
+    bool getActivedPicture(uint32_t* picID);
+
+    bool setBackPicture(uint32_t picID);
+    bool getBackPicture(uint32_t* picID);
+
 };
 
 /**

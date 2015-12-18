@@ -32,3 +32,48 @@ bool NexGauge::setValue(uint32_t number)
 {
   return NexObject::setNumeric(NexVALUE, number);
 }
+
+bool NexGauge::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexGauge::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
+bool NexGauge::setForeColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexFORECOLOR, color);
+}
+
+bool NexGauge::getForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLOR, color);
+}
+
+
+bool NexGauge::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE, picID);
+}
+
+bool NexGauge::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE, picID);
+}
+
+
+bool NexGauge::setWidth(uint32_t width)
+{
+  return NexObject::setNumeric(NexWIDTH, width);
+}
+
+bool NexGauge::getWidth(uint32_t* width)
+{
+  return NexObject::getNumeric(NexWIDTH, width);
+}
+
+

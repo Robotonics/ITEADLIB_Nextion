@@ -48,6 +48,25 @@ public: /* methods */
      * @retval false - failed. 
      */
     bool addValue(uint8_t ch, uint8_t number);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setChannelColor(uint8_t channel, uint32_t color);
+    bool getChannelColor(uint8_t channel, uint32_t* color);
+
+    bool setPicture(uint32_t picID);
+    bool getPicture(uint32_t* picID);
+
+    bool setCropImage(uint32_t picID);
+    bool getCropImage(uint32_t* picID);
+
+    bool setGridColor(uint32_t color);
+    bool getGridColor(uint32_t* color);
+
+    bool setGridWidth(uint32_t width);
+    bool getGridWidth(uint32_t* width);
+
 };
 
 /**

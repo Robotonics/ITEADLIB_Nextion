@@ -29,7 +29,7 @@
  * Matrix which field can be set on what component
  */
 
- // applies to:
+//                               // applies to:
 #define NexBACKCOLOR    "bco"    // Text, Number, Button, Progressbar,        ,     , Gauge, Waveform, Slider,      ,         ,
 #define NexBACKCOLOR0   "bco0"   //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
 #define NexBACKCOLOR1   "bco1"   //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
@@ -43,11 +43,11 @@
 #define NexPICTURE      "pic"    // Text, Number, Button,            , Picture,     ,      , Waveform, Slider,      ,         ,
 #define NexPICTURE0     "pic0"   //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
 #define NexPICTURE1     "pic1"   //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
-#define NexPICTUREACT   "pic2"   // Text, Number, Button,            ,        ,     ,      ,         , Slider,      ,         ,
+#define NexPICTUREACT   "pic2"   //     ,       , Button,            ,        ,     ,      ,         , Slider,      ,         ,
 #define NexCROPIMAGE    "picc"   // Text, Number, Button,            ,        , Crop, Gauge, Waveform, Slider,      ,         ,
 #define NexCROPIMAGE0   "picc0"  //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
 #define NexCROPIMAGE1   "picc1"  //     ,       ,       ,            ,        ,     ,      ,         ,       ,      ,         , DualStateButton
-#define NexCROPIMAGEACT "picc2"  // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,
+#define NexCROPIMAGEACT "picc2"  //     ,       , Button,            ,        ,     ,      ,         ,       ,      ,         ,
 #define NexBACKPICTURE  "bpic"   //     ,       ,       , Progressbar,        ,     ,      ,         ,       ,      ,         ,
 #define NexFOREPICTURE  "ppic"   //     ,       ,       , Progressbar,        ,     ,      ,         ,       ,      ,         ,
 #define NexFONT         "font"   // Text, Number, Button,            ,        ,     ,      ,         ,       ,      ,         ,

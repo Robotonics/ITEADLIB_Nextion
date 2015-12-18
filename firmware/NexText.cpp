@@ -33,7 +33,79 @@ bool NexText::setText(const char *buffer)
   return NexObject::setString(NexTEXT, buffer);
 }
 
+
+bool NexText::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexText::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
 bool NexText::setForeColor(uint32_t number)
 {
   return NexObject::setNumeric(NexFORECOLOR, number);
+}
+
+bool NexText::getForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLOR, color);
+}
+
+
+bool NexText::setPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE, picID);
+}
+
+bool NexText::getPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE, picID);
+}
+
+
+bool NexText::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE, picID);
+}
+
+bool NexText::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE, picID);
+}
+
+
+bool NexText::setFont(uint32_t fontID)
+{
+  return NexObject::setNumeric(NexFONT, fontID);
+}
+
+bool NexText::getFont(uint32_t* fontID)
+{
+  return NexObject::getNumeric(NexFONT, fontID);
+}
+
+
+bool NexText::setAlignX(NexTEXTALIGN_t align)
+{
+  return NexObject::setNumeric(NexALIGNX, (uint32_t)align);
+}
+
+bool NexText::getAlignX(NexTEXTALIGN_t* align)
+{
+  return NexObject::getNumeric(NexALIGNX, (uint32_t*)align);
+}
+
+
+bool NexText::setAlignY(NexTEXTALIGN_t align)
+{
+  return NexObject::setNumeric(NexALIGNY, (uint32_t)align);
+}
+
+bool NexText::getAlignY(NexTEXTALIGN_t* align)
+{
+  return NexObject::getNumeric(NexALIGNX, (uint32_t*)align);
 }

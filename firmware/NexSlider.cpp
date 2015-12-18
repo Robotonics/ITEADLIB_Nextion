@@ -33,12 +33,101 @@ bool NexSlider::setValue(uint32_t number)
   return NexObject::setNumeric(NexVALUE, number);
 }
 
+
 bool NexSlider::setMaxVal(uint32_t number)
 {
   return NexObject::setNumeric(NexMAXVALUE, number);
 }
 
+bool NexSlider::getMaxVal(uint32_t *number)
+{
+  return NexObject::getNumeric(NexMAXVALUE, number);
+}
+
+
 bool NexSlider::setMinVal(uint32_t number)
 {
   return NexObject::setNumeric(NexMINVALUE, number);
+}
+
+bool NexSlider::getMinVal(uint32_t *number)
+{
+  return NexObject::getNumeric(NexMINVALUE, number);
+}
+
+
+bool NexSlider::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexSlider::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
+bool NexSlider::setForeColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexFORECOLOR, color);
+}
+
+bool NexSlider::getForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLOR, color);
+}
+
+
+bool NexSlider::setPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE, picID);
+}
+
+bool NexSlider::getPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE, picID);
+}
+
+
+bool NexSlider::setThumbPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTUREACT, picID);
+}
+
+bool NexSlider::getThumbPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTUREACT, picID);
+}
+
+
+bool NexSlider::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE, picID);
+}
+
+bool NexSlider::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE, picID);
+}
+
+
+bool NexSlider::setThumbWidth(uint32_t width)
+{
+  return NexObject::setNumeric(NexTHUMBWIDTH, width);
+}
+
+bool NexSlider::getThumbWidth(uint32_t* width)
+{
+  return NexObject::getNumeric(NexTHUMBWIDTH, width);
+}
+
+
+bool NexSlider::setThumbHeight(uint32_t height)
+{
+  return NexObject::setNumeric(NexTHUMBHEIGHT, height);
+}
+
+bool NexSlider::getThumbHeight(uint32_t* height)
+{
+  return NexObject::getNumeric(NexTHUMBHEIGHT, height);
 }

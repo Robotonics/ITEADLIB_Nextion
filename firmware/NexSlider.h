@@ -59,8 +59,32 @@ public: /* methods */
     bool setValue(uint32_t number);
     
     bool setMaxVal(uint32_t number);
-    
+    bool getMaxVal(uint32_t* number);
+
     bool setMinVal(uint32_t number);
+    bool getMinVal(uint32_t* number);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setForeColor(uint32_t color);
+    bool getForeColor(uint32_t* color);
+
+    bool setPicture(uint32_t picID);
+    bool getPicture(uint32_t* picID);
+
+    bool setThumbPicture(uint32_t picID);
+    bool getThumbPicture(uint32_t* picID);
+
+    bool setCropImage(uint32_t picID);
+    bool getCropImage(uint32_t* picID);
+
+    bool setThumbWidth(uint32_t width);
+    bool getThumbWidth(uint32_t* width);
+
+    bool setThumbHeight(uint32_t height);
+    bool getThumbHeight(uint32_t* height);
+
 };
 /**
  * @}

@@ -60,11 +60,28 @@ public: /* methods */
      * @return true if success, false for failure. 
      */
     bool setValue(uint32_t number);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setActivedBackColor(uint32_t color);
+    bool getActivedBackColor(uint32_t* color);
+
+    bool setPicture(uint32_t picID);
+    bool getPicture(uint32_t* picID);
+
+    bool setActivedPicture(uint32_t picID);
+    bool getActivedPicture(uint32_t* picID);
+
+    bool setCropImage(uint32_t picID);
+    bool getCropImage(uint32_t* picID);
+
+    bool setActivatedCropImage(uint32_t picID);
+    bool getActivatedCropImage(uint32_t* picID);
+
 };
 /**
  * @}
  */
-
-
 
 #endif /* #ifndef __NEXDSBUTTON_H__ */

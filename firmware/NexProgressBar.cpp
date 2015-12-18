@@ -33,3 +33,45 @@ bool NexProgressBar::setValue(uint32_t number)
   return NexObject::setNumeric(NexVALUE, number);
 }
  
+bool NexProgressBar::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexProgressBar::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
+bool NexProgressBar::setForeColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexFORECOLOR, color);
+}
+
+bool NexProgressBar::getForeColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexFORECOLOR, color);
+}
+
+
+bool NexProgressBar::setActivedPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexFOREPICTURE, picID);
+}
+
+bool NexProgressBar::getActivedPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexFOREPICTURE, picID);
+}
+
+
+bool NexProgressBar::setBackPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexBACKPICTURE, picID);
+}
+
+bool NexProgressBar::getBackPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexBACKPICTURE, picID);
+}

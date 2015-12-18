@@ -54,6 +54,31 @@ public: /* methods */
      * @return true if success, false for failure. 
      */
     bool setValue(uint32_t number);
+
+    bool setBackColor(uint32_t color);
+    bool getBackColor(uint32_t* color);
+
+    bool setForeColor(uint32_t color);
+    bool getForeColor(uint32_t* color);
+
+    bool setPicture(uint32_t picID);
+    bool getPicture(uint32_t* picID);
+
+    bool setCropImage(uint32_t picID);
+    bool getCropImage(uint32_t* picID);
+
+    bool setFont(uint32_t fontID);
+    bool getFont(uint32_t* fontID);
+
+    bool setAlignX(NexTEXTALIGN_t align);
+    bool getAlignX(NexTEXTALIGN_t *align);
+
+    bool setAlignY(NexTEXTALIGN_t align);
+    bool getAlignY(NexTEXTALIGN_t* align);
+
+    bool setLength(uint32_t len);
+    bool getLength(uint32_t* len);
+
 };
 
 /**

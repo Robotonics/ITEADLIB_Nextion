@@ -32,3 +32,72 @@ bool NexDSButton::setValue(uint32_t number)
 {
   return NexObject::setNumeric(NexVALUE, number);
 }
+
+
+bool NexDSButton::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR0, color);
+}
+
+bool NexDSButton::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR0, color);
+}
+
+
+bool NexDSButton::setActivedBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR1, color);
+}
+
+bool NexDSButton::getActivedBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR1, color);
+}
+
+
+
+bool NexDSButton::setPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE0, picID);
+}
+
+bool NexDSButton::getPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE0, picID);
+}
+
+
+bool NexDSButton::setActivedPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE1, picID);
+}
+
+bool NexDSButton::getActivedPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE1, picID);
+}
+
+
+
+
+bool NexDSButton::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE0, picID);
+}
+
+bool NexDSButton::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE0, picID);
+}
+
+
+bool NexDSButton::setActivatedCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE1, picID);
+}
+
+bool NexDSButton::getActivatedCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE1, picID);
+}

@@ -38,3 +38,71 @@ bool NexWaveform::addValue(uint8_t ch, uint8_t number)
     return true;
 }
  
+bool NexWaveform::setBackColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexBACKCOLOR, color);
+}
+
+bool NexWaveform::getBackColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexBACKCOLOR, color);
+}
+
+
+bool NexWaveform::setChannelColor(uint8_t channel, uint32_t color)
+{
+  if (channel > 3) return false;
+  char type[8];
+  snprintf(type, sizeof(type), "%s%u", NexFORECOLOR, channel);
+  return NexObject::setNumeric(type, color);
+}
+
+bool NexWaveform::getChannelColor(uint8_t channel, uint32_t* color)
+{
+  if (channel > 3) return false;
+  char type[8];
+  snprintf(type, sizeof(type), "%s%u", NexFORECOLOR, channel);
+  return NexObject::getNumeric(type, color);
+}
+bool NexWaveform::setPicture(uint32_t picID)
+{
+  return NexObject::setNumeric(NexPICTURE, picID);
+}
+
+bool NexWaveform::getPicture(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexPICTURE, picID);
+}
+
+
+bool NexWaveform::setCropImage(uint32_t picID)
+{
+  return NexObject::setNumeric(NexCROPIMAGE, picID);
+}
+
+bool NexWaveform::getCropImage(uint32_t* picID)
+{
+  return NexObject::getNumeric(NexCROPIMAGE, picID);
+}
+
+
+bool NexWaveform::setGridColor(uint32_t color)
+{
+  return NexObject::setNumeric(NexGRIDCOLOR, color);
+}
+
+bool NexWaveform::getGridColor(uint32_t* color)
+{
+  return NexObject::getNumeric(NexGRIDCOLOR, color);
+}
+
+
+bool NexWaveform::setGridWidth(uint32_t width)
+{
+  return NexObject::setNumeric(NexGRIDWIDTH, width);
+}
+
+bool NexWaveform::getGridWidth(uint32_t* width)
+{
+  return NexObject::getNumeric(NexGRIDWIDTH, width);
+}

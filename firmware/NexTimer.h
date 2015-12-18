@@ -69,7 +69,7 @@ public: /* methods */
      * @retval true - success. 
      * @retval false - failed. 
      */
-    bool getCycle(uint32_t *number); 
+    bool getCycle(uint32_t *number);
 
     /**
      * Set the value of timer cycle val.
@@ -99,6 +99,7 @@ public: /* methods */
      */
     bool disable(void); 
 
+    bool getState(bool* state);
 };
 /**
  * @}

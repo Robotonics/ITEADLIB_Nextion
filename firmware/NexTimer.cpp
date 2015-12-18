@@ -53,3 +53,8 @@ bool NexTimer::disable(void)
 {
   return NexObject::setNumeric("en", 0);
 }
+
+bool NexTimer::getState(bool* state)
+{
+  return NexObject::getNumeric(NexENABLED, (uint32_t*)state);
+}
