@@ -99,6 +99,24 @@ public: /* methods */
   */
   void nexLoop();
 
+  // -------------------------- graphics primitives ---------------------------
+  void clearScreen(uint32_t color = 0xFFFFFF);
+  void plot(uint32_t x, uint32_t y, uint32_t color = 0);
+  void drawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color = 0);
+  void drawRect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color = 0);
+  void fillRect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color = 0);
+  void drawRectAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color = 0);
+  void fillRectAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color = 0);
+  void drawCircle(uint32_t x, uint32_t y, uint32_t r, uint32_t color = 0);
+  void drawPic(uint32_t x, uint32_t y, uint32_t picID = 0);
+  void cropPic(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t picID = 0);
+  void drawText(uint32_t x, uint32_t y, uint32_t w, uint32_t h, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
+    uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+    const char* text);
+  void drawTextAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
+    uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+    const char* text);
+
 protected: /* methods */
 
 private:   /* methods */

@@ -38,6 +38,14 @@
 #define NEX_RET_INVALID_VARIABLE            (0x1A)
 #define NEX_RET_INVALID_OPERATION           (0x1B)
 
+inline void swap(uint32_t* v1, uint32_t* v2)
+{
+  uint32_t dmy;
+  dmy = *v2;
+  *v2 = *v1;
+  *v1 = dmy;
+}
+
 NexDisplay::NexDisplay(USARTSerial serial, uint32_t baudrate)
 { 
   __serial = serial;
@@ -63,6 +71,10 @@ bool NexDisplay::init(uint32_t baudrate)
   bool ret1 = false;
   bool ret2 = false;
 
+  if (!baudrate)                           // no or zero baudrate -> use local __baud
+    baudrate = __baud;
+  else
+    __baud = baudrate;
   __serial.begin(baudrate);
   sendCommand(NexCMDTERM);                 // flush buffer and reset command queue
   sendCommand(NexEXECRESPONSE, __bkCmd=1); // only return success results
@@ -222,6 +234,12 @@ bool NexDisplay::setBaudrate(uint32_t baudrate, bool setDefault)
 {
   bool ret = false;
   char cmd[16];
+
+  if (!baudrate)              // no or zero baudrate -> use local __baud
+    baudrate = __baud;
+  else
+    __baud = baudrate;
+
   if (setDefault)
     snprintf(cmd, sizeof(cmd), NexSETBAUDS, baudrate);
   else
@@ -229,9 +247,9 @@ bool NexDisplay::setBaudrate(uint32_t baudrate, bool setDefault)
   sendCommand(cmd);           // send in new baudrate using the current baudrate
   delay(10);
 
-  __serial.flush();          // dump all returned data, since not usable with new baudrate
-  __serial.end();            // close port (or pretend to ;-)
-  __serial.begin(baudrate);  // activate new baudrate on MCU side too
+  __serial.flush();           // dump all returned data, since not usable with new baudrate
+  __serial.end();             // close port (or pretend to ;-)
+  __serial.begin(baudrate);   // activate new baudrate on MCU side too
   sendCommand("");            // trigger test transmission
 
   if (recvRetCommandFinished())
@@ -374,6 +392,102 @@ void NexDisplay::nexLoop()
     }
   }
 }
+
+// ----------------------------- graphics primitives ---------------------------
+
+void NexDisplay::clearScreen(uint32_t color)
+{
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), NexCLS, color);
+  sendCommand(cmd);
+}
+
+void NexDisplay::plot(uint32_t x, uint32_t y, uint32_t color)
+{
+  drawLine(x, y, x, y, color);
+}
+
+void NexDisplay::drawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color)
+{
+  char cmd[32];
+  if (x1 > x2) swap(&x1, &x2);
+  if (y1 > y2) swap(&y1, &y2);
+  snprintf(cmd, sizeof(cmd), NexDRAWLINE, x1, y1, x2, y2, color);
+  sendCommand(cmd);
+}
+
+void NexDisplay::drawRectAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color)
+{
+  char cmd[32];
+  if (x1 == x2 || y1 == y2)
+  {
+    drawLine(x1, y1, x2, y2, color);
+    return;
+  }
+  if (x1 > x2) swap(&x1, &x2);
+  if (y1 > y2) swap(&y1, &y2);
+  snprintf(cmd, sizeof(cmd), NexDRAWRECT, x1, y1, x2 - 1, y2 - 1, color);
+  sendCommand(cmd);
+}
+void NexDisplay::drawRect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color)
+{
+  drawRectAbs(x, y, x + w, y + h, color);
+}
+
+void NexDisplay::fillRect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t color)
+{
+  char cmd[32];
+  snprintf(cmd, sizeof(cmd), NexFILLRECT, x, y, w, h, color);
+  sendCommand(cmd);
+}
+void NexDisplay::fillRectAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t color)
+{
+  if (x1 > x2) swap(&x1, &x2);
+  if (y1 > y2) swap(&y1, &y2);
+  fillRect(x1, y1, x2 - x1, y2 - y1, color);
+}
+
+void NexDisplay::drawCircle(uint32_t x, uint32_t y, uint32_t r, uint32_t color)
+{
+  char cmd[32];
+  snprintf(cmd, sizeof(cmd), NexDRAWCIRCLE, x, y, r, color);
+  sendCommand(cmd);
+}
+
+void NexDisplay::drawPic(uint32_t x, uint32_t y, uint32_t picID)
+{
+  char cmd[24];
+  snprintf(cmd, sizeof(cmd), NexDRAWPIC, x, y, picID);
+  sendCommand(cmd);
+}
+
+void NexDisplay::cropPic(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t picID)
+{
+  char cmd[32];
+  snprintf(cmd, sizeof(cmd), NexCROPPIC, x, y, w, h, picID);
+  sendCommand(cmd);
+}
+
+void NexDisplay::drawText(uint32_t x, uint32_t y, uint32_t w, uint32_t h, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
+  uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+  const char* text)
+{
+  char cmd[48 + strlen(text)];
+  if (w == 0 || h == 0) return; // no space to draw text
+  memset(cmd, 0, sizeof(cmd));
+  snprintf(cmd, sizeof(cmd), NexTEXTBLOCK, x, y, w, h, fontID, fontColor, backColor, centerX, centerY, backStyle, text);
+  sendCommand(cmd);
+}
+void NexDisplay::drawTextAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
+  uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+  const char* text)
+{
+  if (x1 == x2 || y1 == y2) return; // no space to draw text
+  if (x1 > x2) swap(&x1, &x2);
+  if (y1 > y2) swap(&y1, &y2);
+  drawText(x1, y1, x2 - x1, y2 - y1, centerX, centerY, fontID, fontColor, backColor, backStyle, text);
+}
+
 
 // ----------------------------- PRIVATES ---------------------------
 /*

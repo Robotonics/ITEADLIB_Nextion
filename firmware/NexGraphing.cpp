@@ -69,6 +69,11 @@ void drawRectAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t co
 {
   char cmd[32] = "draw ";
 
+  if (x1 == x2 || y1 == y2)
+  {
+    drawLine(x1, y1, x2, y2, color);
+    return;
+  }
   if (x1 > x2) swap(&x1, &x2);
   if (y1 > y2) swap(&y1, &y2);
   utoa(x1, &cmd[strlen(cmd)], 10);
@@ -156,7 +161,7 @@ void drawText(uint32_t x, uint32_t y, uint32_t w, uint32_t h, NexTEXTALIGN_t cen
   const char* text)
 {
   char cmd[48 + strlen(text)];
-  
+  if (w == 0 || h == 0) return; // no space to draw text
   memset(cmd, 0, sizeof(cmd));
   strcpy(cmd, "xstr ");
   utoa(x, &cmd[strlen(cmd)], 10);
@@ -187,6 +192,7 @@ void drawTextAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, NexTEXTALIG
   uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
   const char* text)
 {
+  if (x1 == x2 || y1 == y2) return; // no space to draw text
   if (x1 > x2) swap(&x1, &x2);
   if (y1 > y2) swap(&y1, &y2);
   drawText(x1, y1, x2 - x1, y2 - y1, centerX, centerY, fontID, fontColor, backColor, backStyle, text);

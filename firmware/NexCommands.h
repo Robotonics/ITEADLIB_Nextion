@@ -51,9 +51,9 @@
                                                    //   e.g. print v0.val returns the four byte binary value
                                                    //        print t0.txt returns the text
                                                    //        print 123    returns binary value
-                                                   //        print "123"  returns 123
+#define NexPRINTSTRING   "print \"%s\""            // instructs the display to send back a string
 #define NexPRINTHEX      "printh %s"               // instructs the display to send back binary data queued as 
-                                                   //   hex string "FF FF FF ..." (exactly one blank as seperator)
+                                                   //   hex string "FF FF FF ..." (exactly one blank as seperator, no quotes)
 #define NexWAVEADDPOINT  "add %u,%u,%u"            // add a point to a waveform component (compID,channel,value 0..255)
 // graphics commands                            
 #define NexCLS           "cls %u"                  // clear screen with given color
@@ -63,7 +63,7 @@
 #define NexDRAWCIRCLE    "cir %u,%u,%u,%u"         // draw circle x,y,radius,color
 #define NexDRAWPIC       "pic %u,%u,%u"            // draw picture x,y,picID
 #define NexCROPPIC       "picq %u,%u,%u,%u,%u"     // crop picture x,y,width,height,picID
-#define NexTEXTBLOCK     "xstr %u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%s"  // draw a text block (see docs)
+#define NexTEXTBLOCK     "xstr %u,%u,%u,%u,%u,%u,%u,%u,%u,%u,\"%s\"" // draw a text block (see docs)
 // system variables      
 #define NexSETDIM        "dim=%u"                  // set backlight 0..100[%] brightness
 #define NexSETDIMS       "dim=%u"                  // set backlight 0..100[%] brightness and store as default
