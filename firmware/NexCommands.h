@@ -85,7 +85,4 @@
                                                    //   2 .. on fail
                                                    //   3 .. always
 #define NexCALIBRATE     "touch_j"                 // triggers touch calibration (usually not needed)
-
-int NexSendCommand(const char *cmdPattern, ...);
-
 #endif

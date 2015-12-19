@@ -120,11 +120,18 @@ public: /* methods */
     uint16_t getString(const char* valueType, char* text, uint16_t len);
     bool setString(const char* valueType, const char* text);
 
+    bool operator==(const NexObject&) const;
+    bool operator!=(const NexObject&) const;
+
 protected: /* data */
     uint8_t __pid; /* Page ID */
     uint8_t __cid; /* Component ID */
     const char *__name; /* An unique name */
     void *__value;
+
+#if defined(SPARK)
+    friend class NexDisplay; // grant access to private date for NexDisplay
+#endif
 };
 /**
  * @}

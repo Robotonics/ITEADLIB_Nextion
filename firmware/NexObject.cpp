@@ -125,3 +125,13 @@ bool NexObject::setString(const char* valueType, const char* text)
   snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
   return NexSetString(attrib, text);
 }
+
+bool NexObject::operator==(const NexObject& other) const
+{
+  return (this->__pid == other.__pid && this->__cid == other.__cid);
+}
+
+bool NexObject::operator!=(const NexObject& other) const
+{
+  return (this->__pid != other.__pid || this->__cid != other.__cid);
+}

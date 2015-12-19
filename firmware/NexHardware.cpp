@@ -174,55 +174,14 @@ __return:
 }
 
 /*
- * Send command to Nextion.
- *
- * @param cmd - the string of command.
- */
-void sendCommand(const char* cmd)
-{
-  while (nexSerial.read() >= 0);  // flush RX buffer only
-  nexSerial.print(cmd);
-  nexSerial.print(NexCMDTERM);
-}
-
-/*
-* Send a batch of commands (skript) each terminated by three 0xFF 
-* bytes to Nextion.
-* If noRR is set TRUE
-*   For the batch the command execution result response gets 
-*   temporarily deactivated.
-*   After completion it will be reactivated and set to the 
-*   previously saved state (bkCmd).
+* Command is executed successfully.
 *
-* @param cmd  - the string of command.
-* @param noRR - indicate if result response should be deactivated (default false)
+* @param timeout - set timeout time.
+*
+* @retval true - success.
+* @retval false - failed.
+*
 */
-void sendSkript(const char* cmd, bool noRR)
-{
-  char buf[12];
-  while (nexSerial.read() >= 0);          // flush RX buffer only
-  if (noRR)
-  {
-    nexSerial.print("bkcmd=0");           // deactivate result response
-    nexSerial.print(NexCMDTERM);
-  }
-  nexSerial.print(cmd);                 
-  if (noRR)
-  {
-    snprintf(buf, sizeof(buf), "bkcmd=%d%s", bkCmd, NexCMDTERM);
-    nexSerial.print(buf);                 // reactivate previous command response
-  }
-}
-
-/*
- * Command is executed successfully.
- *
- * @param timeout - set timeout time.
- *
- * @retval true - success.
- * @retval false - failed.
- *
- */
 bool recvRetCommandFinished(uint32_t timeout)
 {
   bool ret = false;
@@ -245,6 +204,18 @@ bool recvRetCommandFinished(uint32_t timeout)
   }
 
   return ret;
+}
+
+/*
+ * Send command to Nextion.
+ *
+ * @param cmd - the string of command.
+ */
+void sendCommand(const char* cmd)
+{
+  while (nexSerial.read() >= 0);  // flush RX buffer only
+  nexSerial.print(cmd);
+  nexSerial.print(NexCMDTERM);
 }
 
 
@@ -321,7 +292,7 @@ void nexLoop(NexTouch *nex_listen_list[])
     else if (NEX_RET_VALUE_HEAD == c)
     {
       dbSerialPrint("value cmd:");
-      if (nexSerial.available() >= 10)
+      if (nexSerial.available() >= 11)
       {
         __buffer[0] = c;
         for (i = 1; i < 12; i++)
@@ -337,7 +308,7 @@ void nexLoop(NexTouch *nex_listen_list[])
           dbSerialPrint(" Component:");
           dbSerialPrint(__buffer[2]);
           dbSerialPrint(" Value:");
-          i = __buffer[4] | (((unsigned long)__buffer[5]) << 8) | (((unsigned long)__buffer[6]) << 16) | (((unsigned long)__buffer[6]) << 24);
+          i = __buffer[4] | (((unsigned long)__buffer[5]) << 8) | (((unsigned long)__buffer[6]) << 16) | (((unsigned long)__buffer[7]) << 24);
           dbSerialPrintln(i);
           NexTouch::iterate(nex_listen_list, __buffer[1], __buffer[2], (int32_t)__buffer[3], (void *)&(__buffer[4]));
         }

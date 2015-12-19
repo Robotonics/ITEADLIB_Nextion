@@ -128,6 +128,10 @@ private: /* data */
     void *__cbpop_ptr;
     NexTouchEventCb __cb_value;
     void *__cbvalue_ptr;
+
+#if defined(SPARK)
+    friend class NexDisplay; // grant access to private date for NexDisplay
+#endif
 };
 
 /**
