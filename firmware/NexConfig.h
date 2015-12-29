@@ -109,9 +109,9 @@ typedef enum
 #define dbSerialPrintln(a)  dbSerial.println(a)
 #define dbSerialBegin(a)    dbSerial.begin(a)
 #else
-#define dbSerialPrint(a)    ; // used to be do {} while(0)
-#define dbSerialPrintln(a)  ; // used to be do {} while(0)
-#define dbSerialBegin(a)    ; // used to be do {} while(0)
+#define dbSerialPrint(a)    {} while(0)
+#define dbSerialPrintln(a)  {} while(0)
+#define dbSerialBegin(a)    {} while(0)
 #endif
 
 extern int bkCmd;             // command execution response behaviour (default 1 onSuccess)

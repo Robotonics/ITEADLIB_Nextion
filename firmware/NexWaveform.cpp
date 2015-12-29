@@ -18,10 +18,11 @@
 
 #include "NexWaveform.h"
 
+NexWaveform::NexWaveform(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexWaveform::NexWaveform(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexObject(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexWaveform::addValue(uint8_t ch, uint8_t number)
 {
@@ -34,8 +35,7 @@ bool NexWaveform::addValue(uint8_t ch, uint8_t number)
     
     sprintf(buf, NexWAVEADDPOINT, getObjCid(), ch, number);
 
-    sendCommand(buf);
-    return true;
+    return runCommand(buf);
 }
  
 bool NexWaveform::setBackColor(uint32_t color)

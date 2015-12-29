@@ -15,19 +15,20 @@
  * the License, or (at your option) any later version.
  */
 
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-#include "ITEADLIB_Nextion/Nextion.h"
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
 /*
  * Declare a picture object [page id:0,component id:1, component name: "p0"]. 
  */
-NexPicture p0 = NexPicture(0, 1, "p0");
-
-NexTouch *nex_listen_list[] = 
-{
-    &p0,
-    NULL
-};
+NexPicture & p0 = (NexPicture &)display.add(0, 1, "p0");
 
 void p0PopCallback(void *ptr)
 {
@@ -48,16 +49,15 @@ void p0PopCallback(void *ptr)
     p0.setPic(number);
 }
 
-
 void setup(void)
 {
-    nexInit();
+    display.init();
     p0.attachPop(p0PopCallback);
     dbSerialPrintln("setup done");
 }
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
 

@@ -14,21 +14,20 @@
  * the License, or (at your option) any later version.
  */
  
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-NexPage page0    = NexPage(0, 0, "page0");
-NexPage page1    = NexPage(1, 0, "page1");
-NexPage page2    = NexPage(2, 0, "page2");
-NexPage page3    = NexPage(3, 0, "page3");
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
-NexTouch *nex_listen_list[] = 
-{
-    &page0,
-    &page1,
-    &page2,
-    &page3,
-    NULL
-};
+NexPage & page0    = (NexPage & )display.add(0, 0, "page0");
+NexPage & page1    = (NexPage & )display.add(1, 0, "page1");
+NexPage & page2    = (NexPage & )display.add(2, 0, "page2");
+NexPage & page3    = (NexPage & )display.add(3, 0, "page3");
 
 void page0PopCallback(void *ptr)
 {
@@ -56,7 +55,7 @@ void page3PopCallback(void *ptr)
 
 void setup(void)
 {   
-    nexInit();
+    display.init();
     dbSerialPrintln("setup begin");
     
     page0.attachPop(page0PopCallback);
@@ -69,5 +68,5 @@ void setup(void)
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }

@@ -18,8 +18,8 @@
  
 #include "NexHotspot.h"
 
-NexHotspot::NexHotspot(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexTouch(pid, cid, name, value)
-{
-}
+NexHotspot::NexHotspot(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
 
+NexHotspot::NexHotspot(uint8_t pid, uint8_t cid, const char *name, void *value)
+  :NexTouch(pid, cid, name, value) { }

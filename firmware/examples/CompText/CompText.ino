@@ -16,7 +16,15 @@
  * the License, or (at your option) any later version.
  */
 
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
+
+NexDisplay   display;                // the display is the root element
+                                     //NexDisplay display(Serial1, 9600); // alternativly
 
 void t0PopCallback(void *ptr);
 void b0PopCallback(void *ptr);
@@ -25,30 +33,19 @@ void b1PopCallback(void *ptr);
 /*
  * Declare a text object [page id:0,component id:1, component name: "t0"]. 
  */
-NexText t0 = NexText(0, 1, "t0");
+NexText & t0 = (NexText & )display.add(0, 1, "t0");
 
 /*
  * Declare a button object [page id:0,component id:2, component name: "b0"]. 
  */
-NexButton b0 = NexButton(0, 2, "b0");
+NexButton & b0 = (NexButton &)display.add(0, 2, "b0");
 
 /*
  * Declare a button object [page id:0,component id:3, component name: "b1"]. 
  */
-NexButton b1 = NexButton(0, 3, "b1");
+NexButton & b1 = (NexButton & )display.add(0, 3, "b1");
 
 char buffer[100] = {0};
-
-/*
- * Register object t0, b0, b1, to the touch event list.  
- */
-NexTouch *nex_listen_list[] = 
-{
-    &t0,
-    &b0,
-    &b1,
-    NULL
-};
 
 /*
  * Text component pop callback function. 
@@ -108,7 +105,7 @@ void b1PopCallback(void *ptr)
 void setup(void)
 {
     /* Set the baudrate which is for debug and communicate with Nextion screen. */
-    nexInit();
+    display.init();
 
     /* Register the pop event callback function of the current text component. */
     t0.attachPop(t0PopCallback);
@@ -128,6 +125,6 @@ void loop(void)
      * When a pop or push event occured every time, 
      * the corresponding component[right page id and component id] in touch event list will be asked.
      */
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
 

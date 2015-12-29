@@ -19,12 +19,16 @@
 
 #ifndef __NEXOBJECT_H__
 #define __NEXOBJECT_H__
+
 #if defined(SPARK)
 #include "application.h"
 #else
 #include "Arduino.h"
 #endif
-#include "NexConfig.h"
+#include "NexCommands.h"
+
+class NexDisplay;  // forward declare required class
+class NexPage;     // forward declare required class
 
  /**
  * @addtogroup CoreAPI 
@@ -59,17 +63,31 @@
  * them. At least, Page ID(pid), Component ID(pid) and an unique name are needed for
  * creating a component in Nexiton library. 
  */
+
 class NexObject 
 {
-public: /* methods */
+protected: /* methods */
+
+public:    /* methods */
+    /**
+    * Constructor.
+    *
+    * @param display - ref to owning display hardware
+    * @param page    - ref to owning page
+    * @param cid     - component id.
+    * @param name    - pointer to an unique name in range of all components.
+    * @param value   - pointer to the default value of the component.
+    */
+    NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
 
     /**
-     * Constructor. 
-     *
-     * @param pid - page id. 
-     * @param cid - component id.    
-     * @param name - pointer to an unique name in range of all components. 
-     */
+    * Constructor.
+    *
+    * @param pid   - page id.
+    * @param cid   - component id.
+    * @param name  - pointer to an unique name in range of all components.
+    * @param value - pointer to the default value of the component.
+    */
     NexObject(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
     /**
@@ -114,23 +132,28 @@ public: /* methods */
      */
     void setObjValue(uint8_t type, void *value);
 
+    bool runCommand(const char* cmd);
+
     bool getNumeric(const char* valueType, uint32_t* value);
     bool setNumeric(const char* valueType, uint32_t value);
 
     uint16_t getString(const char* valueType, char* text, uint16_t len);
     bool setString(const char* valueType, const char* text);
-
+    
     bool operator==(const NexObject&) const;
     bool operator!=(const NexObject&) const;
 
 protected: /* data */
-    uint8_t __pid; /* Page ID */
-    uint8_t __cid; /* Component ID */
-    const char *__name; /* An unique name */
+    NexDisplay* __display;  /* pointer to the owning display for hardware access   */ 
+    NexPage*    __page;     /* pointer to the owning page (NexPages are selfowned) */
+    uint8_t __pid = 0;      /* Page ID (will be set even for global compnents)     */
+    uint8_t __cid = 0;      /* Component ID                                        */
+    const char *__name;     /* An unique name                                      */
     void *__value;
 
 #if defined(SPARK)
-    friend class NexDisplay; // grant access to private date for NexDisplay
+    friend class NexDisplay; // grant access to protected functions / fields for NexDisplay
+    friend class NexPage;    // grant access to protected functions / fields for NexPage
 #endif
 };
 /**

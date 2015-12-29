@@ -15,18 +15,20 @@
  * the License, or (at your option) any later version.
  */
  
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
+
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
 /*
  * Declare a crop object [page id:0,component id:1, component name: "q0"]. 
  */
-NexCrop q0 = NexCrop(0, 1, "q0");
-
-NexTouch *nex_listen_list[] = 
-{
-    &q0,
-    NULL
-};
+NexCrop & q0 = (NexCrop & )display.add(0, 1, "q0");
 
 /*
  * Crop component pop callback function. 
@@ -47,13 +49,13 @@ void q0PopCallback(void *ptr)
 
 void setup(void)
 {
-    nexInit();
+    display.init();
     q0.attachPop(q0PopCallback);
     dbSerialPrintln("setup done");
 }
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
 

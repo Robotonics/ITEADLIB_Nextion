@@ -18,10 +18,11 @@
 
 #include "NexPicture.h"
 
+NexPicture::NexPicture(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexPicture::NexPicture(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexTouch(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexPicture::getPic(uint32_t *number)
 {

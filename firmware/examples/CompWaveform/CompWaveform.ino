@@ -13,7 +13,16 @@
  * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  */ 
-#include "ITEADLIB_Nextion/Nextion.h"
+
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
+
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
 #define LEVEL_HIGH      (30)
 #define LEVEL_LOW       (0)
@@ -24,7 +33,7 @@
 #define CH3_OFFSET  (CH0_OFFSET + 40 * 3)
 
 
-NexWaveform s0 = NexWaveform(0, 1, "s0");
+NexWaveform & s0 = (NexWaveform &)display.add(0, 1, "s0");
 
 static uint8_t ch0_data = LEVEL_LOW;
 static uint8_t ch1_data = LEVEL_LOW;
@@ -33,7 +42,7 @@ static uint8_t ch3_data = LEVEL_LOW;
 
 void setup(void)
 {
-    nexInit();
+    display.init();
     dbSerialPrintln("setup done");
 }
 
@@ -61,6 +70,5 @@ void loop(void)
     s0.addValue(1, CH1_OFFSET + ch1_data);
     s0.addValue(2, CH2_OFFSET + ch2_data);
     s0.addValue(3, CH3_OFFSET + ch3_data);
-    
 }
 

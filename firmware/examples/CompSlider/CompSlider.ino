@@ -15,16 +15,18 @@
  * the License, or (at your option) any later version.
  */
  
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-NexText t0 = NexText(0, 2, "t0");
-NexSlider h0 = NexSlider(0, 1, "h0");
+NexDisplay   display;                // the display is the root element
+                                     //NexDisplay display(Serial1, 9600); // alternativly
 
-NexTouch *nex_listen_list[] = 
-{
-    &h0,
-    NULL
-};
+NexText   & t0 = (NexText   & )display.add(0, 2, "t0");
+NexSlider & h0 = (NexSlider & )display.add(0, 1, "h0");
 
 void h0PopCallback(void *ptr)
 {
@@ -40,13 +42,13 @@ void h0PopCallback(void *ptr)
 
 void setup(void)
 {
-    nexInit();
+    display.init();
     h0.attachPop(h0PopCallback);
     dbSerialPrintln("setup done");
 }
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
 

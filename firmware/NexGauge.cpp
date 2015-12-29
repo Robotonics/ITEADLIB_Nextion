@@ -18,10 +18,11 @@
 
 #include "NexGauge.h"
 
+NexGauge::NexGauge(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexGauge::NexGauge(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexObject(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexGauge::getValue(uint32_t *number) 
 {

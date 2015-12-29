@@ -16,33 +16,28 @@
  * the License, or (at your option) any later version.
  */
 
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-NexButton b0 = NexButton(0, 2, "b0");
-NexButton b1 = NexButton(0, 5, "b1");
-NexButton b2 = NexButton(0, 6, "b2");
-NexText t0 = NexText(0, 3, "t0");
-NexText t1 = NexText(0, 4, "t1");
-NexTimer tm0 = NexTimer(0, 1, "tm0");
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
+NexButton & b0  = (NexButton &)display.add(0, 2, "b0");
+NexButton & b1  = (NexButton &)display.add(0, 5, "b1");
+NexButton & b2  = (NexButton &)display.add(0, 6, "b2");
+NexText   & t0  = (NexText   &)display.add(0, 3, "t0");
+NexText   & t1  = (NexText   &)display.add(0, 4, "t1");
+NexTimer  & tm0 = (NexTimer  &)display.add(0, 1, "tm0");
 
 char buffer[100] = {0};
 uint32_t number_timer = 0;
 uint32_t number_enable = 0;
 uint32_t number_cycle = 100;
 
-
-
-NexTouch *nex_listen_list[] = 
-{
-    &b0,
-    &b1,
-    &b2,
-    &t0,
-    &t1,
-    &tm0,
-    NULL
-};
 /*
  * Button component pop callback function. 
  * In this example,the button can open the timer when it is released.
@@ -106,18 +101,22 @@ void tm0TimerCallback(void *ptr)
     itoa(number_timer, buffer, 10);
     t0.setText(buffer);
 }
+
+
 void setup(void)
 {    
-    nexInit();
+    display.init();
+
     b0.attachPop(b0PopCallback);
     tm0.attachTimer(tm0TimerCallback);
     b1.attachPop(b1PopCallback);
     b2.attachPop(b2PopCallback);
+
     dbSerialPrintln("setup done"); 
 }
 
 void loop(void)
 {   
-    nexLoop(nex_listen_list);
+    display.nexLoop();
 }
 

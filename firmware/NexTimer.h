@@ -21,7 +21,7 @@
 #define __NEXTIMER_H__
 
 #include "NexTouch.h"
-#include "NexHardware.h"
+
 /**
  * @addtogroup Component 
  * @{ 
@@ -37,6 +37,10 @@
 class NexTimer: public NexTouch
 {
 public: /* methods */
+    /**
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexTimer(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
 
     /**
      * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
@@ -100,6 +104,8 @@ public: /* methods */
     bool disable(void); 
 
     bool getState(bool* state);
+
+    bool isEnabled();
 };
 /**
  * @}

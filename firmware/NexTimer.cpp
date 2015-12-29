@@ -18,10 +18,11 @@
 
 #include "NexTimer.h"
 
+NexTimer::NexTimer(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexTimer::NexTimer(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexTouch(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 void NexTimer::attachTimer(NexTouchEventCb timer, void *ptr)
 {
@@ -57,4 +58,13 @@ bool NexTimer::disable(void)
 bool NexTimer::getState(bool* state)
 {
   return NexObject::getNumeric(NexENABLED, (uint32_t*)state);
+}
+
+bool NexTimer::isEnabled()
+{
+  bool state;
+  if (getState(&state))
+    return state;
+  
+  return false;
 }

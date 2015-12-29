@@ -18,10 +18,11 @@
 
 #include "NexVar.h"
 
-NexVar::NexVar(uint8_t pid, uint8_t cid, const char *name)
-    :NexTouch(pid, cid, name)
-{
-}
+NexVar::NexVar(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
+NexVar::NexVar(uint8_t pid, uint8_t cid, const char *name, void *value)
+  :NexTouch(pid, cid, name, value) { }
 
 uint16_t NexVar::getText(char *buffer, uint16_t len)
 {

@@ -21,7 +21,7 @@
 #define __NEXGAUGE_H__
 
 #include "NexTouch.h"
-#include "NexHardware.h"
+
 /**
  * @addtogroup Component 
  * @{ 
@@ -30,12 +30,17 @@
 /**
  * NexGauge component.
  */
-class NexGauge: public NexObject
+class NexGauge: public NexTouch
 {
 public: /* methods */
     /**
-     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
-     */
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexGauge(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
+
+    /**
+    * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
+    */
     NexGauge(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
     /**
      * Get the value of gauge.

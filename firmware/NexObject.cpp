@@ -17,7 +17,17 @@
 */
 
 #include "NexObject.h"
-#include "NexHardware.h"
+#include "NexDisplay.h"
+
+NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+{
+  this->__display = &display;
+  this->__page = &page;
+  this->__pid = page.__pid;
+  this->__cid = cid;
+  this->__name = name;
+  this->__value = value;
+}
 
 NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value)
 {
@@ -98,32 +108,37 @@ void NexObject::printObjInfo(void)
     dbSerialPrintln("]");
 }
 
+bool NexObject::runCommand(const char* cmd)
+{
+  return __display->runCommand(cmd);
+}
+
 bool NexObject::getNumeric(const char* valueType, uint32_t* value)
 {
   char attrib[32];
   snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
-  return NexGetNumeric(attrib, value);
+  return __display->getNumeric(attrib, value);
 }
 
 bool NexObject::setNumeric(const char* valueType, uint32_t value)
 {
   char attrib[32];
   snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
-  return NexSetNumeric(attrib, value);
+  return __display->setNumeric(attrib, value);
 }
 
 uint16_t NexObject::getString(const char* valueType, char* text, uint16_t len)
 {
   char attrib[32];
   snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
-  return NexGetString(attrib, text, len);
+  return __display->getString(attrib, text, len);
 }
 
 bool NexObject::setString(const char* valueType, const char* text)
 {
   char attrib[32];
   snprintf(attrib, sizeof(attrib), "%s.%s", __name, valueType);
-  return NexSetString(attrib, text);
+  return __display->setString(attrib, text);
 }
 
 bool NexObject::operator==(const NexObject& other) const

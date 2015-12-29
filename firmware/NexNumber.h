@@ -21,7 +21,7 @@
 #define __NEXNUMBER_H__
 
 #include "NexTouch.h"
-#include "NexHardware.h"
+
 /**
  * @addtogroup Component 
  * @{ 
@@ -34,9 +34,13 @@ class NexNumber: public NexTouch
 {
 public: /* methods */
     /**
-     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name);
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexNumber(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
+    /**
+     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
      */
-    NexNumber(uint8_t pid, uint8_t cid, const char *name);
+    NexNumber(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
     
     /**
      * Get number attribute of component.

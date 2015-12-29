@@ -25,6 +25,7 @@
 #else
 #include "Arduino.h"
 #endif
+
 #include "NexConfig.h"
 #include "NexObject.h"
 
@@ -32,8 +33,6 @@
  * @addtogroup TouchEvent 
  * @{ 
  */
-
-
 
 /**
  * Type of callback funciton when an touch event occurs. 
@@ -49,16 +48,19 @@ typedef void (*NexTouchEventCb)(void *ptr);
  * Derives from NexObject and provides methods allowing user to attach
  * (or detach) a callback function called when push(or pop) touch event occurs.
  */
-class NexTouch: public NexObject
+class NexTouch: public NexObject 
 {
 public: /* static methods */    
-    static void iterate(NexTouch **list, uint8_t pid, uint8_t cid, int32_t event, void *value = NULL);
+    //static void iterate(NexTouch **list, uint8_t pid, uint8_t cid, int32_t event, void *value = NULL);
 
 public: /* methods */
-
     /**
-     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
-     */
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexTouch(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
+    /**
+    * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
+    */
     NexTouch(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
     /**
@@ -98,7 +100,7 @@ public: /* methods */
     void detachPop(void);
     
     
-        /**
+     /**
      * Attach an callback function of value touch event. 
      *
      * @param value - callback called with ptr when a value touch event occurs. 

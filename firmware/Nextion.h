@@ -29,8 +29,8 @@
 
 #include "NexConfig.h"
 #include "NexCommands.h"
-#include "NexHardware.h"
 
+#include "NexObject.h"
 #include "NexTouch.h"
 #include "NexButton.h"
 #include "NexCrop.h"
@@ -46,7 +46,5 @@
 #include "NexVar.h"
 #include "NexWaveform.h"
 #include "NexTimer.h"
-
-#include "NexGraphing.h"
 
 #endif /* #ifndef __NEXTION_H__ */

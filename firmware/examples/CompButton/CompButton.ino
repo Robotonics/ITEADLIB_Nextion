@@ -15,23 +15,23 @@
  * the License, or (at your option) any later version.
  */
 
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
+
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
 /*
  * Declare a button object [page id:0,component id:1, component name: "b0"]. 
  */
-NexButton b0 = NexButton(0, 1, "b0");
+
+NexButton & b0 = (NexButton &)display.add(0, 1, "b0");
 
 char buffer[100] = {0};
-
-/*
- * Register a button object to the touch event list.  
- */
-NexTouch *nex_listen_list[] = 
-{
-    &b0,
-    NULL
-};
 
 /*
  * Button component pop callback function. 
@@ -63,7 +63,7 @@ void b0PopCallback(void *ptr)
 void setup(void)
 {    
     /* Set the baudrate which is for debug and communicate with Nextion screen. */
-    nexInit();
+    display.init();
 
     /* Register the pop event callback function of the current button component. */
     b0.attachPop(b0PopCallback, &b0);
@@ -77,17 +77,6 @@ void loop(void)
      * When a pop or push event occured every time,
      * the corresponding component[right page id and component id] in touch event list will be asked.
      */
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
-
-
-
-
-
-
-
-
-
-
-
 

@@ -15,17 +15,18 @@
  * the License, or (at your option) any later version.
  */
 
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-NexHotspot hot0    = NexHotspot(0, 1, "hot0");
-NexHotspot hot1    = NexHotspot(0, 2, "hot1");
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
-NexTouch *nex_listen_list[] = 
-{
-    &hot0,
-    &hot1,
-    NULL
-};
+NexHotspot & hot0    = (NexHotspot & )display.add(0, 1, "hot0");
+NexHotspot & hot1    = (NexHotspot & )display.add(0, 2, "hot1");
 
 void hot0PushCallback(void *ptr)
 {
@@ -57,7 +58,7 @@ void hot1PopCallback(void *ptr)
 
 void setup(void)
 {
-    nexInit();
+    display.init();
     hot0.attachPush(hot0PushCallback, &hot0);
     hot0.attachPop(hot0PopCallback, &hot0);
     hot1.attachPush(hot1PushCallback, &hot1);
@@ -67,5 +68,5 @@ void setup(void)
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }

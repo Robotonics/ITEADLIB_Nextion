@@ -15,26 +15,23 @@
 * the License, or (at your option) any later version.
 */
 
-#include "Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
+
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
 /*
  * Declare a dual state button object [page id:0,component id:1, component name: "bt0"]. 
  */
-NexDSButton bt0 = NexDSButton(0, 1, "bt0");
-
-NexText t0 = NexText(0, 2, "t0");
-
+NexDSButton & bt0 = (NexDSButton & )display.add(0, 1, "bt0");
+NexText     & t0  = (NexText     & )display.add(0, 2, "t0");
 
 char buffer[100] = {0};
-
-/*
- * Register a dual state button object to the touch event list.  
- */
-NexTouch *nex_listen_list[] = 
-{
-    &bt0,
-    NULL
-};
 
 /*
  * Dual state button component pop callback function. 
@@ -64,7 +61,7 @@ void bt0PopCallback(void *ptr)
 void setup(void)
 {    
     /* Set the baudrate which is for debug and communicate with Nextion screen. */
-    nexInit();
+    display.init();
 
     /* Register the pop event callback function of the dual state button component. */
     bt0.attachPop(bt0PopCallback, &bt0);
@@ -78,17 +75,5 @@ void loop(void)
      * When a pop or push event occured every time,
      * the corresponding component[right page id and component id] in touch event list will be asked.
      */
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
-
-
-
-
-
-
-
-
-
-
-
-

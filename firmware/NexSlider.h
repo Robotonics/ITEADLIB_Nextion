@@ -21,7 +21,7 @@
 #define __NEXSLIDER_H__
 
 #include "NexTouch.h"
-#include "NexHardware.h"
+
 /**
  * @addtogroup Component 
  * @{ 
@@ -34,8 +34,13 @@ class NexSlider: public NexTouch
 {
 public: /* methods */
     /**
-     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
-     */
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexSlider(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
+
+    /**
+    * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
+    */
     NexSlider(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
     /**

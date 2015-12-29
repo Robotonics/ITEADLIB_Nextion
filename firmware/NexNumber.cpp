@@ -18,10 +18,11 @@
 
 #include "NexNumber.h"
 
-NexNumber::NexNumber(uint8_t pid, uint8_t cid, const char *name)
-    :NexTouch(pid, cid, name)
-{
-}
+NexNumber::NexNumber(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
+NexNumber::NexNumber(uint8_t pid, uint8_t cid, const char *name, void *value)
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexNumber::getValue(uint32_t *number)
 {

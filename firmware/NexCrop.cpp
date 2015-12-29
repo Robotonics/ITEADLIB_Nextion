@@ -18,10 +18,11 @@
 
 #include "NexCrop.h"
 
+NexCrop::NexCrop(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexCrop::NexCrop(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexTouch(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexCrop::getPic(uint32_t *number)
 {

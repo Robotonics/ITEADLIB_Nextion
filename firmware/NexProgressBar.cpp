@@ -18,10 +18,11 @@
 
 #include "NexProgressBar.h"
 
+NexProgressBar::NexProgressBar(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
 NexProgressBar::NexProgressBar(uint8_t pid, uint8_t cid, const char *name, void *value)
-    :NexObject(pid, cid, name, value)
-{
-}
+  :NexTouch(pid, cid, name, value) { }
 
 bool NexProgressBar::getValue(uint32_t *number)
 {

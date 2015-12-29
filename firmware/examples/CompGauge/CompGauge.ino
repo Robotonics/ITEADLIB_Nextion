@@ -16,18 +16,19 @@
  * the License, or (at your option) any later version.
  */
  
-#include "ITEADLIB_Nextion/Nextion.h"
+#define PARTICLE_BUILD
+#if defined(PARTICLE_BUILD)
+#include "ITEADLIB_Nextion/ITEADLIB_Nextion.h"
+#else
+#include "ITEADLIB_Nextion.h"
+#endif
 
-NexGauge pointer  = NexGauge(0, 1, "pointer");
-NexButton btn_up   = NexButton(0, 2, "btn_up");
-NexButton btn_down = NexButton(0, 3, "btn_down");
+NexDisplay   display;                // the display is the root element
+//NexDisplay display(Serial1, 9600); // alternativly
 
-NexTouch *nex_listen_list[] = 
-{
-    &btn_up,
-    &btn_down,
-    NULL
-};
+NexGauge  & pointer  = (NexGauge  & )display.add(0, 1, "pointer");
+NexButton & btn_up   = (NexButton & )display.add(0, 2, "btn_up");
+NexButton & btn_down = (NexButton & )display.add(0, 3, "btn_down");
 
 void buttonUpPopCallback(void *ptr)
 {
@@ -63,7 +64,7 @@ void buttonDownPopCallback(void *ptr)
 
 void setup(void)
 {
-    nexInit();
+    display.init();
     btn_up.attachPop(buttonUpPopCallback);
     btn_down.attachPop(buttonDownPopCallback);
     dbSerialPrintln("setup done");
@@ -71,6 +72,6 @@ void setup(void)
 
 void loop(void)
 {
-    nexLoop(nex_listen_list);
+   display.nexLoop();
 }
 

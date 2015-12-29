@@ -21,7 +21,7 @@
 #define __NEXVAL_H__
 
 #include "NexTouch.h"
-#include "NexHardware.h"
+
 /**
  * @addtogroup Component 
  * @{ 
@@ -34,9 +34,14 @@ class NexVar: public NexTouch
 {
 public: /* methods */
     /**
-     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name);
+    * @copydoc NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value);
+    */
+    NexVar(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value = NULL);
+
+    /**
+     * @copydoc NexObject::NexObject(uint8_t pid, uint8_t cid, const char *name, void *value);
      */
-    NexVar(uint8_t pid, uint8_t cid, const char *name);
+    NexVar(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
     /**
      * Get text attribute of component.

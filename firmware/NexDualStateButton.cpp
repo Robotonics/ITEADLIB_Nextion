@@ -18,10 +18,12 @@
 
 #include "NexDualStateButton.h"
 
-NexDSButton::NexDSButton(uint8_t pid, uint8_t cid, const char *name)
-    :NexTouch(pid, cid, name)
-{
-}
+NexDSButton::NexDSButton(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
+  :NexTouch(display, page, cid, name, value) { }
+
+NexDSButton::NexDSButton(uint8_t pid, uint8_t cid, const char *name, void *value)
+  :NexTouch(pid, cid, name, value) { }
+
 
 bool NexDSButton::getValue(uint32_t *number)
 {
