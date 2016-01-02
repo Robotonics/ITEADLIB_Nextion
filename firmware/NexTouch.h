@@ -27,6 +27,10 @@
 #endif
 
 #include "NexConfig.h"
+
+class NexDisplay; // forward declare required class
+class NexPage;    // forward declare required class
+
 #include "NexObject.h"
 
 /**

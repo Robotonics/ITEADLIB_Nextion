@@ -151,10 +151,8 @@ protected: /* data */
     const char *__name;     /* An unique name                                      */
     void *__value;
 
-#if defined(SPARK)
-    friend class NexDisplay; // grant access to protected functions / fields for NexDisplay
-    friend class NexPage;    // grant access to protected functions / fields for NexPage
-#endif
+friend class NexDisplay; // grant access to protected functions / fields for NexDisplay
+friend class NexPage;    // grant access to protected functions / fields for NexPage
 };
 /**
  * @}

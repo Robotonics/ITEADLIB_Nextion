@@ -17,7 +17,6 @@
 */
 
 #include "NexPage.h"
-#include "NexDisplay.h"
 
 NexPage::NexPage(NexDisplay& display, uint8_t pid, const char *name, void *value)
   :NexTouch(display, *this, 0, name, value) 
@@ -35,22 +34,25 @@ bool NexPage::show(void)
 {
   char cmd[32];
   //sprintf(cmd, NexPAGENAME, __name);
-  sprintf(cmd, NexPAGEID, __pid);
+  sprintf(cmd, NexPAGEID, (uint32_t)__pid);
   return runCommand(cmd);
 }
 
-NexObject& NexPage::add(NexObject* newComponent, bool withEvents, bool global)
+/* vvvvvvvvvvvvvvvvvvvv templated versions need to be in header vvvvvvvvvvvvvvvvvvvvvvvv
+**
+NexObject& NexPage::add(NexObject& newComponent, bool withEvents, bool global)
 {
   // ToDo: add to private components map
   // ToDo: treatment for global components on owning page (???)
-  if (newComponent->__pid != __pid)
+  if (newComponent.__pid != __pid)
     return *this;  // component not part of this page return page
-  return __display->add(*newComponent, withEvents, global);
+  return __display->add(newComponent, withEvents, global);
 }
-
 NexObject& NexPage::add(uint8_t compID, const char* name, void* value, bool withEvents, bool global)
 {
   // ToDo: add to private components map
   // ToDo: treatment for global components on owning page (???)
   return __display->add(*this, compID, name, value, withEvents, global);
 }
+**
+** ^^^^^^^^^^^^^^^^^^ templated versions need to be in header ^^^^^^^^^^^^^^^^^^^^^ */

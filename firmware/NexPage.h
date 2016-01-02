@@ -20,8 +20,13 @@
 #ifndef __NEXPAGE_H__
 #define __NEXPAGE_H__
 
+class NexDisplay;
+
 #include "NexTouch.h"
+#include "NexDisplay.h"
 #include <map>
+
+class NexDisplay;
 
 /**
  * @addtogroup Component 
@@ -55,11 +60,47 @@ public: /* methods */
     /**
      * Show itself. 
      * 
-     * @return true if success, false for faileure.
+     * @return true if success, false for failure.
      */
     bool show(void);
-    NexObject& add(NexObject* newComponent, bool withEvents = false, bool global = false);
-    NexObject& add(uint8_t compID, const char* name, void* value = NULL, bool withEvents = false, bool global = false);
+
+/*
+
+In file included from NexDisplay.h:24:0,
+                 from NexDisplay.cpp:16:
+NexPage.h: In member function 'T& NexPage::add(T&, bool, bool)':
+NexPage.h:73:23: error: invalid use of incomplete type 'class NexDisplay'
+       return __display->add<T>(newComponent, withEvents, global);
+                       ^
+In file included from NexDisplay.h:23:0,
+                 from NexDisplay.cpp:16:
+NexObject.h:30:7: error: forward declaration of 'class NexDisplay'
+  class NexDisplay;  // forward declare required class
+        ^
+In file included from NexDisplay.h:24:0,
+                 from NexDisplay.cpp:16:
+NexPage.h: In member function 'T& NexPage::add(uint8_t, const char*, void*, bool, bool)':
+NexPage.h:77:23: error: invalid use of incomplete type 'class NexDisplay'
+       return __display->add<T>(*this, compID, name, value, withEvents, global);
+                       ^
+In file included from NexDisplay.h:23:0,
+                 from NexDisplay.cpp:16:
+NexObject.h:30:7: error: forward declaration of 'class NexDisplay'
+  class NexDisplay;  // forward declare required class
+        ^
+
+*/
+
+    template<class T> T& add(T& newComponent, bool withEvents = false, bool global = false)
+    {
+      if (newComponent.__pid != __pid)
+        return *this;  // component not part of this page return page
+      return __display->add<T>(newComponent, withEvents, global);
+    }
+    template<class T> T& add(uint8_t compID, const char* name, void* value = NULL, bool withEvents = false, bool global = false)
+    {
+      return __display->add<T>(*this, compID, name, value, withEvents, global);
+    }
 
 protected: /* fields */
   // not yet implemented

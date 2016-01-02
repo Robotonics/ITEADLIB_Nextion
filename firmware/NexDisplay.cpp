@@ -13,8 +13,8 @@
 * the License, or (at your option) any later version.
 */
 
-#if defined(SPARK)
 #include "NexDisplay.h"
+#include "NexTouch.h"
 #include <stdarg.h>
 
 #define NEX_RET_CMD_FINISHED                (0x01)
@@ -123,14 +123,14 @@ void NexDisplay::sendSkript(const char* cmd, bool noRR)
   while (__serial.read() >= 0);    // flush RX buffer only
   if (noRR)
   {
-    snprintf(buf, sizeof(buf), NexEXECRESPONSE, 0);
+    snprintf(buf, sizeof(buf), NexEXECRESPONSE, (uint32_t)0);
     __serial.print(buf);           // deactivate result response
     __serial.print(NexCMDTERM);
   }
   __serial.print(cmd);
   if (noRR)
   {
-    snprintf(buf, sizeof(buf), NexEXECRESPONSE, __bkCmd);
+    snprintf(buf, sizeof(buf), NexEXECRESPONSE, (uint32_t)__bkCmd);
     __serial.print(buf);           // reactivate previous command response
     __serial.print(NexCMDTERM);
   }
@@ -198,9 +198,9 @@ bool NexDisplay::setBrightness(uint8_t dimValue, bool setDefault)
   char cmd[16];
 
   if (setDefault)
-    snprintf(cmd, sizeof(cmd), NexSETDIMS, dimValue);
+    snprintf(cmd, sizeof(cmd), NexSETDIMS, (uint32_t)dimValue);
   else
-    snprintf(cmd, sizeof(cmd), NexSETDIM, dimValue);
+    snprintf(cmd, sizeof(cmd), NexSETDIM, (uint32_t)dimValue);
   sendCommand(cmd);
   delay(10);
 
@@ -319,6 +319,8 @@ bool NexDisplay::setString(const char* varName, const char* text)
   return recvRetCommandFinished();
 }
 
+/* vvvvvvvvvvvvvvvvvvvv templated versions need to be in header vvvvvvvvvvvvvvvvvvvvvvvv
+**
 NexObject& NexDisplay::add(NexObject& newComponent, bool withEvents, bool global)
 {
   // ToDo: add to special controls map for components withEvents
@@ -332,7 +334,6 @@ NexObject& NexDisplay::add(NexObject& newComponent, bool withEvents, bool global
   
   return ret.first->second;
 }
-
 NexObject& NexDisplay::add(NexPage& page, uint8_t compID, const char* name, void* value, bool withEvents, bool global)
 {
   // ToDo: add to special controls map for components withEvents
@@ -348,7 +349,6 @@ NexObject& NexDisplay::add(NexPage& page, uint8_t compID, const char* name, void
 
   return ret.first->second;
 }
-
 NexObject& NexDisplay::add(uint8_t pageID, uint8_t compID, const char* name, void* value, bool withEvents, bool global)
 {
   // ToDo: add to special controls map for components withEvents
@@ -369,15 +369,15 @@ NexObject& NexDisplay::operator[](const uint16_t key)
 {
   return __components.at(key);
 }
-
 NexObject& NexDisplay::operator[](float pid_point_cid)
 { // cid hast do be 001..255
   uint8_t pid = (uint8_t)pid_point_cid;
   uint8_t cid = (uint8_t)((pid_point_cid - pid) * 1000);
   uint16_t key = (pid << 8) | cid;
-
   return __components.at(key);
 }
+**
+** ^^^^^^^^^^^^^^^^^^ templated versions need to be in header ^^^^^^^^^^^^^^^^^^^^^ */
 
 /**
 * Listen touch event and calling callbacks attached before.
@@ -748,5 +748,3 @@ void NexDisplay::checkEvent(uint8_t pid, uint8_t cid, int32_t event, void *value
     break;
   }
 }
-
-#endif

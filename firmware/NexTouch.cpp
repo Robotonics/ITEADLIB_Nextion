@@ -17,6 +17,10 @@
 */
 
 #include "NexTouch.h"
+
+#include "NexDisplay.h"
+#include "NexPage.h"
+
 NexTouch::NexTouch(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
   :NexObject(display, page, cid, name, value)
 {

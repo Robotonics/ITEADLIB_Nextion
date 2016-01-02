@@ -18,6 +18,7 @@
 
 #include "NexObject.h"
 #include "NexDisplay.h"
+#include "NexPage.h"
 
 NexObject::NexObject(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
 {

@@ -16,12 +16,14 @@
 #ifndef __NEXDISPLAY_H__
 #define __NEXDISPLAY_H__
 
-#include "Nextion.h"
+class NexObject;  // forward declare required class
+class NexTouch;   // forward declare required class
+class NexPage;    // forward declare required class
 
-#if defined(SPARK)
+#include "NexObject.h"
+#include "NexPage.h"
 #include <map>
 
-class NexObject;  // forward declare required class
 
 /**
 * Main class of the Nextion display.
@@ -87,11 +89,60 @@ public: /* methods */
   uint16_t  getString(const char* varName, char* text, uint16_t len);
   bool      setString(const char* varName, const char* text);
 
+  /*
   NexObject& add(NexObject& newComponent, bool withEvents = false, bool global = false);
   NexObject& add(NexPage& page, uint8_t compID, const char* name, void *value = NULL, bool withEvents = false, bool global = false);
   NexObject& add(uint8_t pageID, uint8_t compID, const char* name, void *value = NULL, bool withEvents = false, bool global = false);
   NexObject& operator[](const uint16_t key);
   NexObject& operator[](float pid_point_cid);  // cid hast do be 001..255
+
+  template<class T> T& add(T& newComponent, bool withEvents = false, bool global = false);
+  template<class T> T& add(NexPage& page, uint8_t compID, const char* name, void *value = NULL, bool withEvents = false, bool global = false);
+  template<class T> T& add(uint8_t pageID, uint8_t compID, const char* name, void *value = NULL, bool withEvents = false, bool global = false);
+  template<class T> T& operator[](const uint16_t key);
+  template<class T> T& operator[](float pid_point_cid);  // cid hast do be 001..255
+  */
+
+  template<class T> T& add(T& newComponent, bool withEvents = false, bool global = false)
+  {
+    uint16_t key = (newComponent.__pid << 8) || newComponent.__cid;
+    std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
+    ret = __components.insert(std::pair<uint16_t, NexObject>(key, newComponent));
+    return (T)ret.first->second;
+  }
+  // to get rid of "invalid use of incomplete type 'class NexPage'"
+  // template<class T> T& add(NexObject& page, uint8_t compID, const char* name, void* value = NULL, bool withEvents = false, bool global = false)
+  template<class T> T& add(NexPage& page, uint8_t compID, const char* name, void* value = NULL, bool withEvents = false, bool global = false)
+  {
+    uint16_t key = (page.__pid << 8) || compID;
+    std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
+    ret = __components.emplace(std::piecewise_construct,
+      std::forward_as_tuple(key),
+      std::forward_as_tuple(*this, page, compID, name, value));
+    return (T)ret.first->second;
+  }
+  template<class T> T& add(uint8_t pageID, uint8_t compID, const char* name, void* value = NULL, bool withEvents = false, bool global = false)
+  {
+    uint16_t key = (pageID << 8) || compID;
+    std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
+    ret = __components.emplace(std::piecewise_construct,
+      std::forward_as_tuple(key),
+      std::forward_as_tuple(pageID, compID, name, value));
+    return (T)ret.first->second;
+  }
+
+  template<class T> T& operator[](const uint16_t key)
+  {
+    return (T)__components.at(key);
+  }
+  template<class T> T& operator[](float pid_point_cid)
+  { // cid hast do be 001..255
+    uint8_t pid = (uint8_t)pid_point_cid;
+    uint8_t cid = (uint8_t)((pid_point_cid - pid) * 1000);
+    uint16_t key = (pid << 8) | cid;
+    return (T)__components.at(key);
+  }
+
 
   /**
   * Listen touch event and calling callbacks attached before.
@@ -154,5 +205,4 @@ private: /* data */
 /**
 * @}
 */
-#endif
 #endif
