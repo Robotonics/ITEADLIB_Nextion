@@ -21,7 +21,7 @@
 #define __NEXOBJECT_H__
 
 #if defined(SPARK)
-#include "application.h"
+#include "Particle.h"
 #else
 #include "Arduino.h"
 #endif

@@ -324,7 +324,7 @@ NexObject& NexDisplay::add(NexObject& newComponent, bool withEvents, bool global
   // ToDo: add to special controls map for components withEvents
   // ToDo: treatment for global components (??? e.g. extend name "pageName.compName")
 
-  uint16_t key = (newComponent.__pid << 8) || newComponent.__cid;
+  uint16_t key = (newComponent.__pid << 8) | newComponent.__cid;
 
   std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
 
@@ -338,7 +338,7 @@ NexObject& NexDisplay::add(NexPage& page, uint8_t compID, const char* name, void
   // ToDo: add to special controls map for components withEvents
   // ToDo: treatment for global components (??? e.g. extend name "pageName.compName")
 
-  uint16_t key = (page.__pid << 8) || compID;
+  uint16_t key = (page.__pid << 8) | compID;
 
   std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
 
@@ -354,7 +354,7 @@ NexObject& NexDisplay::add(uint8_t pageID, uint8_t compID, const char* name, voi
   // ToDo: add to special controls map for components withEvents
   // ToDo: treatment for global components (??? e.g. extend name "pageName.compName")
 
-  uint16_t key = (pageID << 8) || compID;
+  uint16_t key = (pageID << 8) | compID;
 
   std::pair<std::map<uint16_t, NexObject>::iterator, bool> ret;
 

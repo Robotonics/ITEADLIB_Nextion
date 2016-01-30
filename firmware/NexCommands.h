@@ -17,7 +17,7 @@
 #ifndef __NEXCOMMANDS_H__
 #define __NEXCOMMANDS_H__
 #if defined(SPARK)
-#include "application.h"
+#include "Particle.h"
 #else
 #include "Arduino.h"
 #endif
