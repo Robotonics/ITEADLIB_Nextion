@@ -37,10 +37,9 @@
 /**
  * Type of callback funciton when an touch event occurs. 
  * 
- * @param ptr - user pointer for any purpose. Commonly, it is a pointer to a object. 
  * @return none. 
  */
-typedef void (*NexTouchEventCb)(void *ptr);
+typedef void (*NexTouchEventCb)();
 
 /**
  * Father class of the components with touch events.  
@@ -66,13 +65,12 @@ public: /* methods */
     /**
      * Attach an callback function of push touch event. 
      *
-     * @param push - callback called with ptr when a push touch event occurs. 
-     * @param ptr - parameter passed into push[default:NULL]. 
+     * @param callback - function called with data when a push touch event occurs. 
      * @return none. 
      *
-     * @note If calling this method multiply, the last call is valid. 
+     * @note If calling this method multiple times, the last call is valid. 
      */
-    void attachPush(NexTouchEventCb push, void *ptr = NULL);
+    void attachPush(NexTouchEventCb callback);
 
     /**
      * Detach an callback function. 
@@ -84,13 +82,12 @@ public: /* methods */
     /**
      * Attach an callback function of pop touch event. 
      *
-     * @param pop - callback called with ptr when a pop touch event occurs. 
-     * @param ptr - parameter passed into pop[default:NULL]. 
+     * @param callback - function called with data when a pop touch event occurs. 
      * @return none. 
      *
-     * @note If calling this method multiply, the last call is valid. 
+     * @note If calling this method multiple times, the last call is valid. 
      */
-    void attachPop(NexTouchEventCb pop, void *ptr = NULL);
+    void attachPop(NexTouchEventCb callback);
 
     /**
      * Detach an callback function. 
@@ -103,13 +100,12 @@ public: /* methods */
      /**
      * Attach an callback function of value touch event. 
      *
-     * @param value - callback called with ptr when a value touch event occurs. 
-     * @param ptr - parameter passed into value[default:NULL]. 
+     * @param callback - function called with data when a value touch event occurs. 
      * @return none. 
      *
-     * @note If calling this method multiply, the last call is valid. 
+     * @note If calling this method multiple times, the last call is valid. 
      */
-    void attachValue(NexTouchEventCb value, void *ptr = NULL);
+    void attachValue(NexTouchEventCb callback);
 
     /**
      * Detach an callback function. 
@@ -121,19 +117,14 @@ public: /* methods */
 private: /* methods */ 
     void push(void);
     void pop(void);
-    void value(uint8_t type, void *value);
-    
+    void value(void);
+
 private: /* data */ 
     NexTouchEventCb __cb_push;
-    void *__cbpush_ptr;
     NexTouchEventCb __cb_pop;
-    void *__cbpop_ptr;
     NexTouchEventCb __cb_value;
-    void *__cbvalue_ptr;
 
-#if defined(SPARK)
     friend class NexDisplay; // grant access to private date for NexDisplay
-#endif
 };
 
 /**

@@ -17,15 +17,14 @@
 */
 
 #include "NexTouch.h"
+#include "NexDisplay.h"
+
 NexTouch::NexTouch(NexDisplay& display, NexPage& page, uint8_t cid, const char *name, void *value)
   :NexObject(display, page, cid, name, value)
 {
   this->__cb_push = NULL;
   this->__cb_pop = NULL;
   this->__cb_value = NULL;
-  this->__cbpop_ptr = NULL;
-  this->__cbpush_ptr = NULL;
-  this->__cbvalue_ptr = NULL;
 }
 
 
@@ -35,108 +34,52 @@ NexTouch::NexTouch(uint8_t pid, uint8_t cid, const char *name, void *value)
   this->__cb_push = NULL;
   this->__cb_pop = NULL;
   this->__cb_value = NULL;
-  this->__cbpop_ptr = NULL;
-  this->__cbpush_ptr = NULL;
-  this->__cbvalue_ptr = NULL;
 }
 
-void NexTouch::attachPush(NexTouchEventCb push, void *ptr)
+void NexTouch::attachPush(NexTouchEventCb callback)
 {
-  this->__cb_push = push;
-  this->__cbpush_ptr = ptr;
+  this->__cb_push = callback;
 }
 
 void NexTouch::detachPush(void)
 {
   this->__cb_push = NULL;
-  this->__cbpush_ptr = NULL;
 }
 
-void NexTouch::attachPop(NexTouchEventCb pop, void *ptr)
+void NexTouch::attachPop(NexTouchEventCb callback)
 {
-  this->__cb_pop = pop;
-  this->__cbpop_ptr = ptr;
+  this->__cb_pop = callback;
 }
 
 void NexTouch::detachPop(void)
 {
   this->__cb_pop = NULL;
-  this->__cbpop_ptr = NULL;
 }
 
-void NexTouch::attachValue(NexTouchEventCb value, void *ptr)
+void NexTouch::attachValue(NexTouchEventCb callback)
 {
-  this->__cb_value = value;
-  this->__cbvalue_ptr = ptr;
+  this->__cb_value = callback;
 }
 
 void NexTouch::detachValue(void)
 {
   this->__cb_value = NULL;
-  this->__cbvalue_ptr = NULL;
 }
 
 void NexTouch::push(void)
 {
   if (__cb_push)
-  {
-    __cb_push(__cbpush_ptr);
-  }
+    __display->enqueueEvent(__cb_push);
 }
 
 void NexTouch::pop(void)
 {
   if (__cb_pop)
-  {
-    __cb_pop(__cbpop_ptr);
-  }
+    __display->enqueueEvent(__cb_pop);
 }
 
-void NexTouch::value(uint8_t type, void *value)
+void NexTouch::value(void)
 {
-  ((NexObject *)__cbvalue_ptr)->setObjValue(type, value);
-
   if (__cb_value)
-  {
-    __cb_value(__cbvalue_ptr);
-  }
+    __display->enqueueEvent(__cb_value);
 }
-
-/*
-void NexTouch::iterate(NexTouch **list, uint8_t pid, uint8_t cid, int32_t event, void *value)
-{
-    NexTouch *e = NULL;
-    uint16_t i = 0;
-
-    if (NULL == list)
-    {
-        return;
-    }
-
-    for(i = 0; (e = list[i]) != NULL; i++)
-    {
-        if (e->getObjPid() == pid && e->getObjCid() == cid)
-        {
-            e->printObjInfo();
-            if (NEX_EVENT_PUSH == event)
-            {
-                e->push();
-            }
-            else if (NEX_EVENT_POP == event)
-            {
-                e->pop();
-            }
-            else if (NEX_EVENT_VALUE == event)
-            {
-                e->value(NEX_EVENT_VALUE, value);
-            }
-            else if (NEX_EVENT_STRING == event)
-            {
-                e->value(NEX_EVENT_STRING, value);
-            }
-
-            break;
-        }
-    }
-}
-*/

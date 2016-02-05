@@ -79,35 +79,6 @@ void* NexObject::getObjValue(void)
     return __value;
 }
 
-void NexObject::printObjInfo(void)
-{
-    dbSerialPrint("[");
-    dbSerialPrint((uint32_t)this);
-    dbSerialPrint(":");
-    dbSerialPrint(__pid);
-    dbSerialPrint(",");
-    dbSerialPrint(__cid);
-    dbSerialPrint(",");
-    if (__name)
-    {
-        dbSerialPrint(__name);
-    }
-    else
-    {
-        dbSerialPrint("(null)");
-    }
-    dbSerialPrint(",");
-    if (__value)
-    {
-        dbSerialPrint((uint32_t)__value);
-    }
-    else
-    {
-        dbSerialPrint("(null)");
-    }        
-    dbSerialPrintln("]");
-}
-
 bool NexObject::runCommand(const char* cmd)
 {
   return __display->runCommand(cmd);

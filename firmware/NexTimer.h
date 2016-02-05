@@ -51,12 +51,11 @@ public: /* methods */
      * Attach an callback function of timer respond event. 
      *
      * @param timer - callback called with ptr when a timer respond event occurs. 
-     * @param ptr - parameter passed into push[default:NULL]. 
      * @return none. 
      *
      * @note If calling this method multiply, the last call is valid. 
      */
-    void attachTimer(NexTouchEventCb timer, void *ptr = NULL);
+    void attachTimer(NexTouchEventCb timer);
 
     /**
      * Detach an callback function. 

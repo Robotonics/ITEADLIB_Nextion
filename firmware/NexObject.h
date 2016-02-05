@@ -20,11 +20,7 @@
 #ifndef __NEXOBJECT_H__
 #define __NEXOBJECT_H__
 
-#if defined(SPARK)
 #include "Particle.h"
-#else
-#include "Arduino.h"
-#endif
 #include "NexCommands.h"
 
 class NexDisplay;  // forward declare required class
@@ -90,13 +86,6 @@ public:    /* methods */
     */
     NexObject(uint8_t pid, uint8_t cid, const char *name, void *value = NULL);
 
-    /**
-     * Print current object'address, page id, component id and name. 
-     *
-     * @warning this method does nothing, unless debug message enabled. 
-     */
-    void printObjInfo(void);
-
     /*
      * Get page id.
      *
@@ -151,10 +140,8 @@ protected: /* data */
     const char *__name;     /* An unique name                                      */
     void *__value;
 
-#if defined(SPARK)
     friend class NexDisplay; // grant access to protected functions / fields for NexDisplay
     friend class NexPage;    // grant access to protected functions / fields for NexPage
-#endif
 };
 /**
  * @}

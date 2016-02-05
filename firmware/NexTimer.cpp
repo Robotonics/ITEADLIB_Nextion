@@ -24,9 +24,9 @@ NexTimer::NexTimer(NexDisplay& display, NexPage& page, uint8_t cid, const char *
 NexTimer::NexTimer(uint8_t pid, uint8_t cid, const char *name, void *value)
   :NexTouch(pid, cid, name, value) { }
 
-void NexTimer::attachTimer(NexTouchEventCb timer, void *ptr)
+void NexTimer::attachTimer(NexTouchEventCb timer)
 {
-    NexTouch::attachPop(timer, ptr);
+    NexTouch::attachPop(timer);
 }
 
 void NexTimer::detachTimer(void)

@@ -13,7 +13,6 @@
 * the License, or (at your option) any later version.
 */
 
-#if defined(SPARK)
 #include "NexDisplay.h"
 #include <stdarg.h>
 
@@ -44,18 +43,18 @@ inline void swap(uint32_t* v1, uint32_t* v2)
   *v1 = dmy;
 }
 
-NexDisplay::NexDisplay(USARTSerial serial, uint32_t baudrate)
+NexDisplay::NexDisplay(USARTSerial& serial, uint32_t baudrate)
 { 
-  __serial = serial;
-  __baud = baudrate;
+  this->__serial = &serial;
+  this->__baud = baudrate;
 }
 
-NexDisplay::NexDisplay(uint16_t width, uint16_t height, USARTSerial serial, uint32_t baudrate)
+NexDisplay::NexDisplay(uint16_t width, uint16_t height, USARTSerial& serial, uint32_t baudrate)
 {
-  __serial = serial;
-  __baud = baudrate;
-  __width = width;
-  __height = height;
+  this->__serial = &serial;
+  this->__baud = baudrate;
+  this->__width = width;
+  this->__height = height;
 }
 
 NexDisplay::~NexDisplay()
@@ -73,7 +72,7 @@ bool NexDisplay::init(uint32_t baudrate)
     baudrate = __baud;
   else
     __baud = baudrate;
-  __serial.begin(baudrate);
+  __serial->begin(baudrate);
   sendCommand(NexCMDTERM);                 // flush buffer and reset command queue
   sendCommand(NexEXECRESPONSE, __bkCmd=1); // only return success results
   ret1 = recvRetCommandFinished();
@@ -92,17 +91,16 @@ int NexDisplay::sendCommand(const char *cmdPattern, ...)
   ret = vsnprintf(buf, sizeof(buf), cmdPattern, args);
   va_end(args);
 
-  while (__serial.read() >= 0);  // flush RX buffer only
+  while (__serial->read() >= 0);  // flush RX buffer only
   if (ret >= (int)sizeof(buf))    // cast to prevent warning [-Wsign-compare]
     ret *= -1; // if buffer was too short indicate error as neg. required length
   else if (ret > 0)
   {
-    __serial.print(buf);
+    __serial->print(buf);
     if (memcmp((const char*)&buf[ret - 3], NexCMDTERM, 3))  // if command was not properly terminated
-      __serial.print(NexCMDTERM);          //   do it now
+      __serial->print(NexCMDTERM);          //   do it now
   }
-  dbSerialPrintln(buf);
-
+  
   return ret;
 }
 
@@ -120,19 +118,19 @@ int NexDisplay::sendCommand(const char *cmdPattern, ...)
 void NexDisplay::sendSkript(const char* cmd, bool noRR)
 {
   char buf[12];
-  while (__serial.read() >= 0);    // flush RX buffer only
+  while (__serial->read() >= 0);    // flush RX buffer only
   if (noRR)
   {
     snprintf(buf, sizeof(buf), NexEXECRESPONSE, 0);
-    __serial.print(buf);           // deactivate result response
-    __serial.print(NexCMDTERM);
+    __serial->print(buf);           // deactivate result response
+    __serial->print(NexCMDTERM);
   }
-  __serial.print(cmd);
+  __serial->print(cmd);
   if (noRR)
   {
     snprintf(buf, sizeof(buf), NexEXECRESPONSE, __bkCmd);
-    __serial.print(buf);           // reactivate previous command response
-    __serial.print(NexCMDTERM);
+    __serial->print(buf);           // reactivate previous command response
+    __serial->print(NexCMDTERM);
   }
 }
 
@@ -156,8 +154,8 @@ bool NexDisplay::sendCurrentPageId(uint8_t* pageId)
   }
   sendCommand("sendme");
   delay(50);
-  __serial.setTimeout(100);
-  if (sizeof(temp) != __serial.readBytes((char *)temp, sizeof(temp)))
+  __serial->setTimeout(100);
+  if (sizeof(temp) != __serial->readBytes((char *)temp, sizeof(temp)))
   {
     goto __return;
   }
@@ -169,17 +167,6 @@ bool NexDisplay::sendCurrentPageId(uint8_t* pageId)
   }
 
 __return:
-
-  if (ret)
-  {
-    dbSerialPrint("recvPageId :");
-    dbSerialPrintln(*pageId);
-  }
-  else
-  {
-    dbSerialPrintln("recvPageId err");
-  }
-
   return ret;
 }
 
@@ -205,17 +192,7 @@ bool NexDisplay::setBrightness(uint8_t dimValue, bool setDefault)
   delay(10);
 
   if (recvRetCommandFinished())
-  {
-    dbSerialPrint("setCurrentBrightness[ ");
-    dbSerialPrint(dimValue);
-    dbSerialPrintln("]ok ");
-
     ret = true;
-  }
-  else
-  {
-    dbSerialPrintln("setCurrentBrightness err ");
-  }
 
   return ret;
 }
@@ -245,21 +222,14 @@ bool NexDisplay::setBaudrate(uint32_t baudrate, bool setDefault)
   sendCommand(cmd);           // send in new baudrate using the current baudrate
   delay(10);
 
-  __serial.flush();           // dump all returned data, since not usable with new baudrate
-  //__serial.end();             // close port (or pretend to ;-)
+  __serial->flush();           // dump all returned data, since not usable with new baudrate
+  //__serial->end();             // close port (or pretend to ;-)
   delay(100);
-  __serial.begin(baudrate);   // activate new baudrate on MCU side too
+  __serial->begin(baudrate);   // activate new baudrate on MCU side too
   sendCommand("");            // trigger test transmission
 
   if (recvRetCommandFinished())
-  {
-    dbSerialPrintln("setBaudrate ok ");
     ret = true;
-  }
-  else
-  {
-    dbSerialPrintln("setBaudrate err ");
-  }
 
   return ret;
 }
@@ -361,7 +331,8 @@ NexObject& NexDisplay::add(uint8_t pageID, uint8_t compID, const char* name, voi
   ret = __components.emplace(std::piecewise_construct,
     std::forward_as_tuple(key),
     std::forward_as_tuple(pageID, compID, name, value));
-
+  ret.first->second.__display = this;
+  
   return ret.first->second;
 }
 
@@ -394,21 +365,16 @@ void NexDisplay::nexLoop()
 {
   char buf[20];
 
-  while (__serial.available())
+  while (__serial->available())
   {
-#if defined(SPARK)
     Particle.process();
-    delay(5);
-#else
     delay(10);
-#endif
-    switch (buf[0] = __serial.read())
+    switch (buf[0] = __serial->read())
     {
     case NEX_RET_EVENT_TOUCH_HEAD:
-      dbSerialPrint("NEX_RET_EVENT_TOUCH_HEAD");
-      if (__serial.available() >= 6)
+      if (__serial->available() >= 6)
       {
-        __serial.readBytes(&buf[1], 6);
+        __serial->readBytes(&buf[1], 6);
         buf[7] = 0x00;
 
         if (memcmp((const char*)&buf[4], NexCMDTERM, 3) == 0)
@@ -416,34 +382,25 @@ void NexDisplay::nexLoop()
       }
       break;
     case NEX_RET_CURRENT_PAGE_ID_HEAD:
-      dbSerialPrint("page cmd:");
-      if (__serial.available() >= 4)
+      if (__serial->available() >= 4)
       {
-        __serial.readBytes(&buf[1], 4);
+        __serial->readBytes(&buf[1], 4);
         buf[5] = 0x00;
 
         if (memcmp((const char*)&buf[2], NexCMDTERM, 3) == 0)
         {
-          dbSerialPrintln(buf[1]);
           checkEvent(buf[1], 0, (int32_t)NEX_EVENT_PUSH, NULL);
         }
       }
       break;
     case NEX_RET_VALUE_HEAD:
-      dbSerialPrint("value cmd:");
-      if (__serial.available() >= 11)
+      if (__serial->available() >= 11)
       {
-        __serial.readBytes(&buf[1], 11);
+        __serial->readBytes(&buf[1], 11);
         buf[12] = 0x00;
 
         if (memcmp((const char*)&buf[9], NexCMDTERM, 3) == 0)
         {
-          dbSerialPrint(" Page:");
-          dbSerialPrint(buf[1]);
-          dbSerialPrint(" Component:");
-          dbSerialPrint(buf[2]);
-          dbSerialPrint(" Value:");
-          dbSerialPrintln(buf[4] | (((unsigned long)buf[5]) << 8) | (((unsigned long)buf[6]) << 16) | (((unsigned long)buf[7]) << 24));
           checkEvent(buf[1], buf[2], (int32_t)buf[3], (void *)&(buf[4]));
         }
       }
@@ -452,7 +409,22 @@ void NexDisplay::nexLoop()
       break;
     }
   }
+
+  for (int i = 0; i < __queuedEvents; i++)
+  {
+    __eventQueue[i]();
+    __eventQueue[i] = NULL;
+  }
+  __queuedEvents = 0;
 }
+
+void NexDisplay::enqueueEvent(void(*eventCallback)(void))
+{
+  if (__queuedEvents < sizeof(__eventQueue) / sizeof(void(*)()))
+    __eventQueue[__queuedEvents++] = eventCallback;
+}
+
+// -----------------------------  protected methods  ---------------------------
 
 // ----------------------------- graphics primitives ---------------------------
 
@@ -575,8 +547,8 @@ bool NexDisplay::recvRetNumber(uint32_t *number, uint32_t timeout)
     goto __return;
   }
 
-  __serial.setTimeout(timeout);
-  if (sizeof(temp) != __serial.readBytes((char *)temp, sizeof(temp)))
+  __serial->setTimeout(timeout);
+  if (sizeof(temp) != __serial->readBytes((char *)temp, sizeof(temp)))
   {
     goto __return;
   }
@@ -588,16 +560,6 @@ bool NexDisplay::recvRetNumber(uint32_t *number, uint32_t timeout)
   }
 
 __return:
-
-  if (ret)
-  {
-    dbSerialPrint("recvRetNumber :");
-    dbSerialPrintln(*number);
-  }
-  else
-  {
-    dbSerialPrintln("recvRetNumber err");
-  }
 
   return ret;
 }
@@ -632,15 +594,11 @@ uint16_t NexDisplay::recvRetString(char *buffer, uint16_t len, uint32_t timeout)
   start = millis();
   while (cnt_0xff < 3 && millis() - start <= timeout)
   {
-#if defined(SPARK)
     Particle.process();
-#endif
-    while (__serial.available())
+    while (__serial->available())
     {
-#if defined(SPARK)
       Particle.process();
-#endif
-      c = __serial.read();
+      c = __serial->read();
       if (str_start_flag)
       {
         if (0xFF == c)
@@ -670,12 +628,6 @@ uint16_t NexDisplay::recvRetString(char *buffer, uint16_t len, uint32_t timeout)
 
 __return:
 
-  dbSerialPrint("recvRetString[");
-  dbSerialPrint(strlen(buffer));
-  dbSerialPrint(",");
-  dbSerialPrint(buffer);
-  dbSerialPrintln("]");
-
   return ret;
 }
 
@@ -693,21 +645,12 @@ bool NexDisplay::recvRetCommandFinished(uint32_t timeout)
   bool ret = false;
   uint8_t temp[4] = "";
 
-  __serial.setTimeout(timeout);
-  if (sizeof(temp) != __serial.readBytes((char *)temp, sizeof(temp)))
+  __serial->setTimeout(timeout);
+  if (sizeof(temp) != __serial->readBytes((char *)temp, sizeof(temp)))
     ret = false;
 
   if (temp[0] == NEX_RET_CMD_FINISHED && memcmp((const char*)&temp[1], NexCMDTERM, 3) == 0)
     ret = true;
-
-  if (ret)
-  { // need curly braces due to dbSerialPrintln macro
-    dbSerialPrintln("recvRetCommandFinished ok");
-  }
-  else
-  { // need curly braces due to dbSerialPrintln macro
-    dbSerialPrintln("recvRetCommandFinished err");
-  }
 
   return ret;
 }
@@ -722,14 +665,9 @@ void NexDisplay::checkEvent(uint8_t pid, uint8_t cid, int32_t event, void *value
     NexTouch& ctl = (NexTouch&)__components.at(key);
   //}
   //catch (const std::out_of_range& oor) {
-  //  dbSerialPrint("No control found for [pageID:compID] ");
-  //  dbSerialPrint(pid);
-  //  dbSerialPrint(":");
-  //  dbSerialPrintln(cid);
   //  return;
   //}
 
-  ctl.printObjInfo();
   switch (event)
   {
   case NEX_EVENT_PUSH:
@@ -739,14 +677,11 @@ void NexDisplay::checkEvent(uint8_t pid, uint8_t cid, int32_t event, void *value
     ctl.pop();
     break;
   case NEX_EVENT_VALUE:
-    ctl.value(NEX_EVENT_VALUE, value);
-    break;
   case NEX_EVENT_STRING:
-    ctl.value(NEX_EVENT_STRING, value);
+    ctl.setObjValue(event, value);
+    ctl.value();
     break;
   default:
     break;
   }
 }
-
-#endif

@@ -18,7 +18,6 @@
 
 #include "Nextion.h"
 
-#if defined(SPARK)
 #include <map>
 
 class NexObject;  // forward declare required class
@@ -41,8 +40,8 @@ public: /* methods */
   * @param serial   - reference to the serial com port to use
   * @param baudrate - baud rate for communication between MCU and display
   */
-  NexDisplay(USARTSerial serial = Serial1, uint32_t baudrate = 9600);
-  NexDisplay(uint16_t width, uint16_t height, USARTSerial serial = Serial1, uint32_t baudrate = 9600);
+  NexDisplay(USARTSerial& serial = Serial1, uint32_t baudrate = 9600);
+  NexDisplay(uint16_t width, uint16_t height, USARTSerial& serial = Serial1, uint32_t baudrate = 9600);
   
   ~NexDisplay();
 
@@ -118,12 +117,14 @@ public: /* methods */
   void drawPic(uint32_t x, uint32_t y, uint32_t picID = 0);
   void cropPic(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t picID = 0);
   void drawText(uint32_t x, uint32_t y, uint32_t w, uint32_t h, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
-    uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
-    const char* text);
+  uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+  const char* text);
   void drawTextAbs(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, NexTEXTALIGN_t centerX, NexTEXTALIGN_t centerY,
-    uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
-    const char* text);
+  uint32_t fontID, uint32_t fontColor, uint32_t backColor, NexBACKGROUND_t backStyle,
+  const char* text);
   uint16_t color565(uint16_t R, uint16_t G, uint16_t B);
+
+  void enqueueEvent(void(*eventCallback)(void));
 
 protected: /* methods */
 
@@ -136,23 +137,29 @@ private:   /* methods */
 
 protected: /* data */
   std::map<uint16_t, NexObject>  __components; /* map to hold all components for standard access */
-  // not yet implementd
+                                               // not yet implementd
   //std::map<uint16_t, NexTouch> __controls;   /* map to hold subset to watch for touch events   */
-  USARTSerial __serial = Serial1;  /* serial port for communicatino MCU <-> display  */
-private: /* data */
-  uint32_t __baud = 9600;          /* baudrate     */
-  uint16_t __width  = 0;           /* pixel width  */
-  uint16_t __height = 0;           /* pixel height */
-  uint8_t  __bkCmd = 1;            /* command execution response behaviour */
-                                   // 0 .. no response
-                                   // 1 .. onSuccess (default
-                                   // 2 .. noFail
-                                   // 3 .. always
+
+  USARTSerial* __serial;              /* serial port for communicatino MCU <-> display  */
+                                      // list of up to ten pending events to be serviced each iteration of nexLoop
+                                      
+private: /* data */                   
+  uint32_t __baud = 9600;             /* baudrate     */
+  uint16_t __width  = 0;              /* pixel width  */
+  uint16_t __height = 0;              /* pixel height */
+  uint8_t  __bkCmd = 1;               /* command execution response behaviour */
+                                      // 0 .. no response
+                                      // 1 .. onSuccess (default
+                                      // 2 .. noFail
+                                      // 3 .. always
+                                      // a queue of up to ten pending events to be serviced each iteration of nexLoop
+  void(*__eventQueue[10])(void) = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+  uint8_t __queuedEvents        = 0;// cound of currently pending events
+
 
   friend class NexPage;    // grant access to protected functions / fields for NexPage
 };
 /**
 * @}
 */
-#endif
 #endif
